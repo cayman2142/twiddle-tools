@@ -1,0 +1,213 @@
+/* Isolated "page under inspection". Not --tw-* and not chrome --sl-* roles. */
+
+.host-app {
+  --background: #fafafa;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --color-brand: #0f766e;
+  --color-fg: #18181b;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  min-height: 520px;
+  display: flex;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.host-app--phone {
+  flex-direction: column;
+  max-width: 390px;
+  margin: 0 auto;
+}
+
+.host-app__side {
+  flex: 0 0 200px;
+  padding: var(--space-4);
+  border-right: 1px solid var(--border);
+  background: var(--card);
+}
+
+.host-app--phone .host-app__side {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-right: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.host-app__brand {
+  margin: 0 0 var(--space-4);
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.host-app--phone .host-app__brand {
+  margin: 0;
+}
+
+.host-app__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.host-app--phone .host-app__nav {
+  flex-direction: row;
+}
+
+.host-app__nav button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+.host-app__nav button.is-on {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.host-app__main {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-6);
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.host-app--phone .host-app__main {
+  grid-template-columns: 1fr;
+}
+
+.host-app__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.host-app__hero h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.host-app__hero p {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.host-cta {
+  appearance: none;
+  border: 0;
+  background: var(--color-brand);
+  color: #fff;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.host-cta.is-off-scale {
+  padding: 11px 22px;
+}
+
+.host-cta.is-token {
+  padding: var(--space-4) var(--space-6);
+}
+
+.host-login {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.host-login.is-edited {
+  padding: 24px;
+}
+
+.host-login h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.host-login label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+.host-login input {
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  background: var(--card);
+  color: var(--foreground);
+}
+
+.host-login__submit {
+  appearance: none;
+  border: 0;
+  background: var(--color-fg);
+  color: #fff;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.host-cards {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.host-app--phone .host-cards {
+  grid-template-columns: 1fr;
+}
+
+.host-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.host-card strong {
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.host-card p {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.host-card.is-duplicate {
+  outline: 1px dashed var(--color-brand);
+}

@@ -1,0 +1,135 @@
+/* Park product chrome inside a scene card. Product CSS uses position:fixed
+ * and a 21474836xx z-band for host pages; that would escape the marketing frame. */
+
+.scene-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--tw-surface);
+  border: 1px solid var(--tw-border);
+  border-radius: var(--sl-r-3xl);
+  box-shadow: var(--sl-shadow-panel);
+  min-height: 520px;
+}
+
+.scene-stage__host {
+  position: relative;
+  z-index: 1;
+  min-height: 520px;
+}
+
+.scene-stage .sl-panel,
+.scene-stage .sl-fab-dock,
+.scene-stage .sl-hatch,
+.scene-stage .sl-hatch-preview,
+.scene-stage .sl-hatch__band,
+.scene-stage .sl-size-cap,
+.scene-stage .sl-outline,
+.scene-stage .sl-hover-outline,
+.scene-stage .sl-change-badges {
+  position: absolute !important;
+  z-index: 4 !important;
+}
+
+.scene-stage .sl-panel.is-visible {
+  top: var(--tw-space-4);
+  right: var(--tw-space-4);
+  max-height: calc(100% - 96px);
+  display: flex;
+}
+
+.scene-stage .sl-fab-dock {
+  left: 0;
+  right: 0;
+  bottom: var(--tw-space-4);
+  top: auto;
+}
+
+.scene-stage .sl-hatch,
+.scene-stage .sl-hatch-preview {
+  inset: 0;
+  display: block;
+}
+
+.scene-stage .sl-hatch__band {
+  position: absolute !important;
+}
+
+.scene-stage .sl-hatch__band--top {
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.scene-stage .sl-hatch__band--bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.scene-stage .sl-hatch__band--left {
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.scene-stage .sl-hatch__band--right {
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.scene-stage .sl-hatch__band--pad {
+  background: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--sl-role-pad-9) 36%, transparent) 0 var(--sl-space-4),
+    transparent var(--sl-space-4) var(--sl-space-8)
+  );
+}
+
+.scene-stage .sl-outline {
+  inset: calc(var(--sl-space-2) * -1);
+  display: block;
+  box-shadow: none;
+  border-radius: inherit;
+}
+
+.scene-stage .sl-size-cap {
+  display: block;
+  top: calc(var(--sl-space-8) * -1);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.scene-stage .host-pin {
+  position: relative;
+  z-index: 2;
+}
+
+.scene-payload {
+  position: absolute;
+  z-index: 5;
+  left: var(--tw-space-4);
+  right: calc(340px + var(--tw-space-8));
+  bottom: calc(var(--tw-space-12) + var(--tw-space-8));
+  max-width: 36rem;
+  padding: var(--tw-space-4);
+  background: var(--sl-surface);
+  color: var(--sl-fg);
+  border-radius: var(--sl-r-2xl);
+  box-shadow: var(--sl-shadow-panel);
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-xs);
+  line-height: 1.45;
+}
+
+.scene-payload__kicker {
+  display: block;
+  margin-bottom: var(--tw-space-2);
+  color: var(--sl-fg-secondary);
+  font-family: var(--sl-font-ui);
+  font-size: var(--sl-text-2xs);
+  font-weight: 600;
+  text-transform: uppercase;
+}

@@ -1,0 +1,94 @@
+/* Shared Radix color primitives — chrome and site both import this file.
+ * Do not put type, space, motion, or chrome-only roles here.
+ * Theme: html[data-sl-theme="light"|"dark"] (default = light).
+ * Source: @radix-ui/colors (MIT — ../tokens/LICENSE-radix).
+ */
+
+html {
+  --sl-white: #ffffff;
+}
+
+html:not([data-sl-theme]),
+html[data-sl-theme="light"] {
+  --sl-gray-1: #fcfcfc;
+  --sl-gray-2: #f9f9f9;
+  --sl-gray-3: #f0f0f0;
+  --sl-gray-4: #e8e8e8;
+  --sl-gray-5: #e0e0e0;
+  --sl-gray-6: #d9d9d9;
+  --sl-gray-7: #cecece;
+  --sl-gray-8: #bbbbbb;
+  --sl-gray-9: #8d8d8d;
+  --sl-gray-10: #838383;
+  /* FE-07 — darkened step between Radix gray-10 and gray-11 so 10–11px
+     muted copy clears AA on all three surface tiers. */
+  --sl-gray-10a: #6b6b6b;
+  --sl-gray-11: #646464;
+  --sl-gray-12: #202020;
+
+  --sl-blue-1: #fbfdff;
+  --sl-blue-2: #f4faff;
+  --sl-blue-3: #e6f4fe;
+  --sl-blue-4: #d5efff;
+  --sl-blue-5: #c2e5ff;
+  --sl-blue-6: #acd8fc;
+  --sl-blue-7: #8ec8f6;
+  --sl-blue-8: #5eb1ef;
+  --sl-blue-9: #0090ff;
+  --sl-blue-10: #0588f0;
+  --sl-blue-11: #0d74ce;
+  /* FE-08 — one step darker than blue-11 so 11px labels on blue-3 clear AA. */
+  --sl-blue-11a: #0a6bbf;
+  --sl-blue-12: #113264;
+
+  --sl-crimson-9: #e93d82;
+  --sl-crimson-11: #cb1d63;
+  --sl-amber-11: #ab6400;
+  --sl-teal-3: #e1faf4;
+  --sl-teal-9: #12a594;
+  --sl-teal-11: #008573;
+  --sl-violet-9: #6e56cf;
+  --sl-orange-3: #ffefd6;
+  --sl-orange-9: #f76b15;
+  --sl-orange-11: #cc4e00;
+}
+
+html[data-sl-theme="dark"] {
+  --sl-gray-1: #111111;
+  --sl-gray-2: #191919;
+  --sl-gray-3: #222222;
+  --sl-gray-4: #2a2a2a;
+  --sl-gray-5: #313131;
+  --sl-gray-6: #3a3a3a;
+  --sl-gray-7: #484848;
+  --sl-gray-8: #606060;
+  --sl-gray-9: #6e6e6e;
+  --sl-gray-10: #7b7b7b;
+  --sl-gray-10a: #9b9b9b;
+  --sl-gray-11: #b4b4b4;
+  --sl-gray-12: #eeeeee;
+
+  --sl-blue-1: #0d1520;
+  --sl-blue-2: #111927;
+  --sl-blue-3: #0d2847;
+  --sl-blue-4: #003362;
+  --sl-blue-5: #004074;
+  --sl-blue-6: #104d87;
+  --sl-blue-7: #205d9e;
+  --sl-blue-8: #2870bd;
+  --sl-blue-9: #0090ff;
+  --sl-blue-10: #3b9eff;
+  --sl-blue-11: #70b8ff;
+  --sl-blue-12: #c2e6ff;
+
+  --sl-crimson-9: #e93d82;
+  --sl-crimson-11: #ff92ad;
+  --sl-amber-11: #ffca16;
+  --sl-teal-3: #0d3c38;
+  --sl-teal-9: #12a594;
+  --sl-teal-11: #0eb39e;
+  --sl-violet-9: #6e56cf;
+  --sl-orange-3: #331e0b;
+  --sl-orange-9: #f76b15;
+  --sl-orange-11: #ffa057;
+}

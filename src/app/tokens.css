@@ -1,0 +1,56 @@
+/* Marketing frame tokens. Colors alias Radix primitives (same as chrome).
+ * Type and page shell are site-only. Do not load this into the extension. */
+@import '../../vendor/chrome/tokens.css';
+@import '@fontsource-variable/onest/wght.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+html {
+  --tw-font-sans: 'Onest Variable', 'Onest', system-ui, sans-serif;
+  --tw-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --tw-text-xs: 14px;
+  --tw-text-sm: 16px;
+  --tw-text-md: 18px;
+  --tw-text-lg: 24px;
+  --tw-text-xl: 32px;
+  --tw-text-2xl: 40px;
+  --tw-text-3xl: 56px;
+  --tw-leading-tight: 1.2;
+  --tw-leading-body: 1.55;
+  --tw-tracking-display: -0.03em;
+  --tw-measure: 65ch;
+  --tw-page: 1200px;
+  --tw-space-2: 8px;
+  --tw-space-3: 12px;
+  --tw-space-4: 16px;
+  --tw-space-6: 24px;
+  --tw-space-8: 32px;
+  --tw-space-12: 48px;
+}
+
+html:not([data-sl-theme]),
+html[data-sl-theme='light'] {
+  --tw-bg: var(--sl-gray-1);
+  --tw-surface: var(--sl-white);
+  --tw-fg: var(--sl-gray-12);
+  --tw-fg-secondary: var(--sl-gray-11);
+  --tw-fg-muted: var(--sl-gray-10a);
+  --tw-fg-on-accent: var(--sl-fg-on-accent);
+  --tw-border: var(--sl-gray-6);
+  --tw-accent: var(--sl-blue-9);
+  --tw-accent-solid: var(--sl-blue-11);
+  --tw-focus-ring: var(--sl-blue-9);
+}
+
+html[data-sl-theme='dark'] {
+  --tw-bg: var(--sl-gray-1);
+  --tw-surface: var(--sl-gray-2);
+  --tw-fg: var(--sl-gray-12);
+  --tw-fg-secondary: var(--sl-gray-11);
+  --tw-fg-muted: var(--sl-gray-10a);
+  --tw-fg-on-accent: var(--sl-fg-on-accent);
+  --tw-border: var(--sl-gray-7);
+  --tw-accent: var(--sl-blue-9);
+  --tw-accent-solid: var(--sl-blue-8);
+  --tw-focus-ring: var(--sl-blue-9);
+}
