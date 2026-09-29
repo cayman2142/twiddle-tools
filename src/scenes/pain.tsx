@@ -5,6 +5,7 @@ import type { Scene } from './types';
 export const painScene: Scene = {
   id: 'pain',
   eyebrow: 'The loop',
+  icon: 'inspect',
   title: 'Stop explaining the tweak. Change the live page.',
   body: 'Stop pasting screenshots into your agent. Pin the thing that is off, see the hatch, then edit it on the page itself.',
   stateLabels: { a: 'Pin', b: 'Inspect' },

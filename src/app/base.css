@@ -19,7 +19,7 @@ body,
 }
 
 body {
-  background: var(--tw-bg);
+  background: var(--tw-bezel);
   color: var(--tw-fg);
   font-family: var(--tw-font-sans);
   font-size: var(--tw-text-sm);
@@ -59,9 +59,10 @@ code {
 }
 
 .site-doc {
-  width: min(var(--tw-measure), calc(100% - var(--tw-space-8)));
-  margin: 0 auto;
-  padding: calc(var(--tw-space-12) + var(--tw-space-8)) 0 var(--tw-space-8);
+  width: 100%;
+  max-width: calc(var(--tw-measure) + var(--tw-space-8) + var(--tw-space-8));
+  margin: 0;
+  padding: calc(var(--tw-space-12) + var(--tw-space-8)) var(--tw-space-8) var(--tw-space-8);
 }
 
 .site-doc h1,

@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "twiddle-tools",
+  "compatibility_date": "2026-09-21",
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [
+    { "pattern": "twiddle.tools", "custom_domain": true },
+    { "pattern": "www.twiddle.tools", "custom_domain": true },
+    { "pattern": "app.twiddle.tools/*", "zone_name": "twiddle.tools" },
+    { "pattern": "ipv4test.twiddle.tools/*", "zone_name": "twiddle.tools" },
+    { "pattern": "www2.twiddle.tools/*", "zone_name": "twiddle.tools" }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

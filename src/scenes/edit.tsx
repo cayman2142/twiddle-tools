@@ -5,6 +5,7 @@ import type { Scene } from './types';
 export const editScene: Scene = {
   id: 'edit',
   eyebrow: 'Edit like Figma',
+  icon: 'paintbrush',
   title: 'Spacing, color, layout, blocks — the GUI you already know.',
   body: 'Fill / Fixed / Hug, four-sided padding, color, duplicate / cut / paste / drag. You are not typing CSS.',
   stateLabels: { a: 'Editors', b: 'Duplicate' },

@@ -1,6 +1,7 @@
 /* Shared Radix color primitives — chrome and site both import this file.
  * Do not put type, space, motion, or chrome-only roles here.
- * Theme: html[data-sl-theme="light"|"dark"] (default = light).
+ * Theme: html[data-sl-theme] (catalog / site) and [data-sl-chrome][data-sl-theme]
+ * (inject chrome). Default = light. Plugin never writes the html attribute.
  * Source: @radix-ui/colors (MIT — ../tokens/LICENSE-radix).
  */
 
@@ -9,7 +10,9 @@ html {
 }
 
 html:not([data-sl-theme]),
-html[data-sl-theme="light"] {
+html[data-sl-theme="light"],
+[data-sl-chrome]:not([data-sl-theme]),
+[data-sl-chrome][data-sl-theme="light"] {
   --sl-gray-1: #fcfcfc;
   --sl-gray-2: #f9f9f9;
   --sl-gray-3: #f0f0f0;
@@ -53,7 +56,8 @@ html[data-sl-theme="light"] {
   --sl-orange-11: #cc4e00;
 }
 
-html[data-sl-theme="dark"] {
+html[data-sl-theme="dark"],
+[data-sl-chrome][data-sl-theme="dark"] {
   --sl-gray-1: #111111;
   --sl-gray-2: #191919;
   --sl-gray-3: #222222;

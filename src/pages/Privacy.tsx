@@ -1,9 +1,8 @@
-import { Nav } from '../marketing/Nav';
+import { SiteShell } from '../marketing/SiteShell';
 
 export function Privacy() {
   return (
-    <>
-      <Nav />
+    <SiteShell>
       <main className="site-doc">
         <h1>Twiddle Privacy Policy</h1>
         <p className="site-meta">
@@ -121,6 +120,6 @@ export function Privacy() {
           Product mail (after Email Routing): <code>privacy@twiddle.tools</code>, <code>hello@twiddle.tools</code>.
         </p>
       </main>
-    </>
+    </SiteShell>
   );
 }

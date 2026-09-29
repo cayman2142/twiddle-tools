@@ -1,11 +1,11 @@
 type Props = {
-  className?: string;
+  size?: 'nav' | 'hero';
 };
 
-export function CtaButton({ className }: Props) {
+export function CtaButton({ size = 'nav' }: Props) {
   return (
-    <button type="button" className={className ?? 'site-cta'} disabled>
-      Add to Chrome — coming soon
+    <button type="button" className={size === 'hero' ? 'site-cta site-cta--hero' : 'site-cta'} disabled>
+      Coming soon
     </button>
   );
 }

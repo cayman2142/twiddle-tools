@@ -27,21 +27,66 @@ export function SizeRow({ value, mode = 'Fixed' }: { value: string; mode?: 'Fixe
   );
 }
 
-export function SidesEditor({ values }: { values: [string, string, string, string] }) {
-  const sides: Array<[string, string, string]> = [
-    ['Top', 'side-top', values[0]],
-    ['Right', 'side-right', values[1]],
-    ['Bottom', 'side-bottom', values[2]],
-    ['Left', 'side-left', values[3]],
-  ];
+export type SideTuple = [string, string, string, string];
+
+export function SidesEditor({
+  values,
+  onChange,
+  kind = 'box',
+}: {
+  values: SideTuple;
+  onChange?: (values: SideTuple) => void;
+  kind?: 'box' | 'radius';
+}) {
+  const live = Boolean(onChange);
+  const cells: Array<[string, string]> =
+    kind === 'radius'
+      ? [
+          ['Top left', 'corner-tl'],
+          ['Top right', 'corner-tr'],
+          ['Bottom right', 'corner-br'],
+          ['Bottom left', 'corner-bl'],
+        ]
+      : [
+          ['Top', 'side-top'],
+          ['Right', 'side-right'],
+          ['Bottom', 'side-bottom'],
+          ['Left', 'side-left'],
+        ];
   return (
-    <span className="sl-ed-sides" role="group" aria-label="Box sides">
-      {sides.map(([label, icon, value]) => (
+    <span className="sl-ed-sides" role="group" aria-label={kind === 'radius' ? 'Corners' : 'Box sides'}>
+      {cells.map(([label, icon], index) => (
         <label className="sl-ed-sides__cell" key={label}>
           <span className="sl-ed-sides__ico" aria-hidden="true">
             <Icon name={icon} size={12} />
           </span>
-          <input className="sl-ed__num" value={value} aria-label={`${label} spacing`} readOnly />
+          <input
+            className="sl-ed__num"
+            value={values[index]}
+            aria-label={`${label} ${kind === 'radius' ? 'radius' : 'spacing'}`}
+            inputMode="numeric"
+            readOnly={!live}
+            onChange={
+              live
+                ? (event) => {
+                    const digits = event.target.value.replace(/[^\d]/g, '').slice(0, 3);
+                    const next: SideTuple = [...values];
+                    next[index] = digits;
+                    onChange?.(next);
+                  }
+                : undefined
+            }
+            onBlur={
+              live
+                ? () => {
+                    const next: SideTuple = [...values];
+                    const n = Number.parseInt(next[index], 10);
+                    next[index] = Number.isFinite(n) ? String(Math.min(96, Math.max(0, n))) : '0';
+                    onChange?.(next);
+                  }
+                : undefined
+            }
+          />
         </label>
       ))}
       <span className="sl-ed-sides__unit">px</span>

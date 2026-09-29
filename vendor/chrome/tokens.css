@@ -1,7 +1,8 @@
 /* Spec Lens chrome tokens
  * Primitives: src/tokens/primitives.css (shared with the marketing site)
  * Semantics + chrome type: this file — consumed by spec-lens.css
- * Theme: html[data-sl-theme="light"|"dark"] (default = light)
+ * Theme: html[data-sl-theme] (catalog / site) + [data-sl-chrome][data-sl-theme]
+ * (inject). Plugin never writes data-sl-theme on html.
  * Overlay role solids stay on light-scale steps so hatch stays readable on any host.
  */
 @import url('./tokens/primitives.css');
@@ -152,7 +153,9 @@ html {
 
 /* ---- Light primitives + semantics ---- */
 html:not([data-sl-theme]),
-html[data-sl-theme="light"] {
+html[data-sl-theme="light"],
+[data-sl-chrome]:not([data-sl-theme]),
+[data-sl-chrome][data-sl-theme="light"] {
   --sl-bg: var(--sl-gray-1);
   --sl-surface: var(--sl-white);
   --sl-surface-muted: var(--sl-gray-2);
@@ -238,7 +241,8 @@ html[data-sl-theme="light"] {
 }
 
 /* ---- Dark primitives + semantics ---- */
-html[data-sl-theme="dark"] {
+html[data-sl-theme="dark"],
+[data-sl-chrome][data-sl-theme="dark"] {
   --sl-bg: var(--sl-gray-1);
   --sl-surface: var(--sl-gray-2);
   --sl-surface-muted: var(--sl-gray-3);

@@ -28,17 +28,20 @@ npm run vendor:chrome -- "C:\Knowledge Base\projects\spec-lens"
 
 ## Deploy
 
-Cloudflare Pages, output `dist`:
+**Live (2026-09-21):** [twiddle.tools](https://twiddle.tools) — Cloudflare Worker `twiddle-tools` serving `dist` as static assets (not Pages). Fallback: `https://twiddle-tools.caymnjke.workers.dev`.
 
 - `/` → React landing
-- `/privacy` → `privacy.html` (Chrome Web Store needs this URL)
+- `/privacy` → `privacy.html` (Chrome Web Store needs this URL — must stay 200)
 
-Wrangler cannot deploy from this machine without `CLOUDFLARE_API_TOKEN`. In the Cloudflare dashboard:
+First time on a machine: `npx wrangler login`. Then:
 
-1. Workers & Pages → Create → Pages → Connect the GitHub repo.
-2. Build command `npm run build`, output `dist`.
-3. Custom domain: attach the existing `twiddle.tools` zone (already on Cloudflare Registrar).
-4. Confirm `https://twiddle.tools/privacy` returns 200 before the CWS listing.
+```bash
+npm run deploy
+```
+
+That is `npm run build && wrangler deploy`. Config is `wrangler.jsonc` (custom domains `twiddle.tools` and `www.twiddle.tools`). After a deploy, open `/` and `/privacy` once.
+
+KB (where/how, CWS notes): `projects/spec-lens/docs/MARKETING-SITE.md`.
 
 ## Claims
 

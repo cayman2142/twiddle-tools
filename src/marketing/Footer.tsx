@@ -1,6 +1,11 @@
+import { BrandMark } from './BrandMark';
+
 export function Footer() {
   return (
     <footer className="site-footer">
+      <p className="site-footer__brand">
+        <BrandMark mark="lockup" size="sm" onDark />
+      </p>
       <p>What you edit stays in your browser — we never upload your page.</p>
       <p>
         Feedback you choose to Send is the exception.{' '}

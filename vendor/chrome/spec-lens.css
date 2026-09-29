@@ -201,6 +201,21 @@
   width: 16px !important;
   height: 16px !important;
 }
+/* Tab + section glyphs live on `.sl-panel svg`, which is not in the 16px
+   blanket above. Without !important a host `svg{height:auto!important}`
+   collapses them to an empty box — they look like missing icons. */
+.sl-panel__tab-ico svg {
+  width: 16px !important;
+  height: 16px !important;
+}
+.sl-section__head > svg:first-of-type {
+  width: 11px !important;
+  height: 11px !important;
+}
+.sl-section__chevron {
+  width: 10px !important;
+  height: 10px !important;
+}
 .sl-panel .sl-tok__copy svg,
 .sl-panel .sl-asset__copy svg,
 .sl-panel .sl-asset__open svg,
@@ -332,6 +347,11 @@
    @property makes --*-i animatable; without it Chromium treats the custom
    property as discrete and `transition: transform` never interpolates. */
 @property --sl-seg-i {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --sl-tab-i {
   syntax: "<number>";
   inherits: true;
   initial-value: 0;
@@ -718,41 +738,41 @@
 /* Isolate scrim lives on .sl-outline; hatch/measure/size are the rulers.
    Eyedropper drops only these so the sample is the page, not a tinted overlay.
    Screenshot uses the same set, then also hides product chrome below. */
-html:is(.sl-screenshotting, .sl-picking-color) .sl-outline,
-html:is(.sl-screenshotting, .sl-picking-color) .sl-hover-outline,
-html:is(.sl-screenshotting, .sl-picking-color) .sl-multi-outlines,
-html:is(.sl-screenshotting, .sl-picking-color) .sl-hatch,
-html:is(.sl-screenshotting, .sl-picking-color) .sl-hatch-preview,
-html:is(.sl-screenshotting, .sl-picking-color) .sl-measure,
-html:is(.sl-screenshotting, .sl-picking-color) .sl-size-cap,
-html:is(.sl-screenshotting, .sl-picking-color) .sl-size-bound {
+html:is(.sl-screenshotting, .sl-picking-color) [data-sl-chrome].sl-outline,
+html:is(.sl-screenshotting, .sl-picking-color) [data-sl-chrome].sl-hover-outline,
+html:is(.sl-screenshotting, .sl-picking-color) [data-sl-chrome].sl-multi-outlines,
+html:is(.sl-screenshotting, .sl-picking-color) [data-sl-chrome].sl-hatch,
+html:is(.sl-screenshotting, .sl-picking-color) [data-sl-chrome].sl-hatch-preview,
+html:is(.sl-screenshotting, .sl-picking-color) [data-sl-chrome].sl-measure,
+html:is(.sl-screenshotting, .sl-picking-color) [data-sl-chrome].sl-size-cap,
+html:is(.sl-screenshotting, .sl-picking-color) [data-sl-chrome].sl-size-bound {
   visibility: hidden !important;
 }
 /* Product chrome — screenshot only. Keep .sl-adapt visible — otherwise adapt
    mode vanishes for a frame, the host page shows through, and captureVisibleTab
-   crops the wrong place. */
-html.sl-screenshotting .sl-hover-blocker,
-html.sl-screenshotting .sl-change-badges,
-html.sl-screenshotting .sl-text-edit-fab,
-html.sl-screenshotting .sl-overlay-thumb,
-html.sl-screenshotting .sl-panel,
-html.sl-screenshotting .sl-fab-dock,
-html.sl-screenshotting .sl-settings,
-html.sl-screenshotting .sl-sheet,
-html.sl-screenshotting .sl-tip,
-html.sl-screenshotting .sl-tooltip,
-html.sl-screenshotting .sl-edit-pop,
-html.sl-screenshotting .sl-dd__menu,
-html.sl-screenshotting .sl-toolbar__copy-menu,
-html.sl-screenshotting .sl-panel__copy-menu,
-html.sl-screenshotting .sl-ed-shadow__flyout,
-html.sl-screenshotting .sl-live,
-html.sl-screenshotting .sl-asset-toast,
-html.sl-screenshotting .sl-dockzones,
-html.sl-screenshotting .sl-adapt__top,
-html.sl-screenshotting .sl-adapt__frame-head,
-html.sl-screenshotting .sl-adapt__pierce,
-html.sl-screenshotting .sl-adapt__blocked {
+   crops the wrong place. Kit demos reuse these classes and must stay visible. */
+html.sl-screenshotting [data-sl-chrome].sl-hover-blocker,
+html.sl-screenshotting [data-sl-chrome].sl-change-badges,
+html.sl-screenshotting [data-sl-chrome].sl-text-edit-fab,
+html.sl-screenshotting [data-sl-chrome].sl-overlay-thumb,
+html.sl-screenshotting [data-sl-chrome].sl-panel,
+html.sl-screenshotting [data-sl-chrome].sl-fab-dock,
+html.sl-screenshotting [data-sl-chrome].sl-settings,
+html.sl-screenshotting [data-sl-chrome].sl-sheet,
+html.sl-screenshotting [data-sl-chrome].sl-tip,
+html.sl-screenshotting [data-sl-chrome].sl-tooltip,
+html.sl-screenshotting [data-sl-chrome].sl-edit-pop,
+html.sl-screenshotting [data-sl-chrome].sl-dd__menu,
+html.sl-screenshotting [data-sl-chrome].sl-toolbar__copy-menu,
+html.sl-screenshotting [data-sl-chrome].sl-panel__copy-menu,
+html.sl-screenshotting [data-sl-chrome].sl-ed-shadow__flyout,
+html.sl-screenshotting [data-sl-chrome].sl-live,
+html.sl-screenshotting [data-sl-chrome].sl-asset-toast,
+html.sl-screenshotting [data-sl-chrome].sl-dockzones,
+html.sl-screenshotting [data-sl-chrome] .sl-adapt__top,
+html.sl-screenshotting [data-sl-chrome] .sl-adapt__frame-head,
+html.sl-screenshotting [data-sl-chrome] .sl-adapt__pierce,
+html.sl-screenshotting [data-sl-chrome] .sl-adapt__blocked {
   visibility: hidden !important;
 }
 /* X-ray paints outlines + a pad veil on the page itself — not Spec chrome. */
@@ -765,19 +785,20 @@ html:is(.sl-screenshotting, .sl-picking-color).sl-xray body::after {
   background: none !important;
 }
 
-/* Pause: keep FAB dock, hide selection chrome (pin stays in memory). */
-html.sl-inspect-paused .sl-outline,
-html.sl-inspect-paused .sl-hover-outline,
-html.sl-inspect-paused .sl-multi-outlines,
-html.sl-inspect-paused .sl-hatch,
-html.sl-inspect-paused .sl-hatch-preview,
-html.sl-inspect-paused .sl-measure,
-html.sl-inspect-paused .sl-size-cap,
-html.sl-inspect-paused .sl-size-bound,
-html.sl-inspect-paused .sl-change-badges,
-html.sl-inspect-paused .sl-text-edit-fab,
-html.sl-inspect-paused .sl-panel,
-html.sl-inspect-paused .sl-tip {
+/* Pause: keep FAB dock, hide selection chrome (pin stays in memory).
+   Only product roots — kit playground .sl-panel must stay visible. */
+html.sl-inspect-paused [data-sl-chrome].sl-outline,
+html.sl-inspect-paused [data-sl-chrome].sl-hover-outline,
+html.sl-inspect-paused [data-sl-chrome].sl-multi-outlines,
+html.sl-inspect-paused [data-sl-chrome].sl-hatch,
+html.sl-inspect-paused [data-sl-chrome].sl-hatch-preview,
+html.sl-inspect-paused [data-sl-chrome].sl-measure,
+html.sl-inspect-paused [data-sl-chrome].sl-size-cap,
+html.sl-inspect-paused [data-sl-chrome].sl-size-bound,
+html.sl-inspect-paused [data-sl-chrome].sl-change-badges,
+html.sl-inspect-paused [data-sl-chrome].sl-text-edit-fab,
+html.sl-inspect-paused [data-sl-chrome].sl-panel,
+html.sl-inspect-paused [data-sl-chrome].sl-tip {
   visibility: hidden !important;
   pointer-events: none !important;
 }
@@ -884,8 +905,15 @@ html.sl-inspect-paused .sl-tip {
    the icon-button metrics live here. */
 .sl-mode {
   margin: 0;
+  gap: var(--sl-space-4);
   border-radius: var(--sl-r-xl);
   border-color: var(--sl-ink-12);
+}
+/* Shared .sl-seg thumb assumes gap:0 and translateX(i * 100%).
+   Toolbar mode has a 4px gutter — step by thumb + gap, not thumb alone. */
+.sl-mode.sl-seg::before {
+  width: calc((100% - var(--sl-space-4) - (var(--sl-seg-n) - 1) * var(--sl-space-4)) / var(--sl-seg-n));
+  transform: translateX(calc(var(--sl-seg-i) * (100% + var(--sl-space-4))));
 }
 /* "Spec is off" was a 0.72 opacity on a fully clickable control, colliding with
    the 0.38/0.35 that mean disabled. Drop the track instead — the buttons stay
@@ -1222,37 +1250,8 @@ html.sl-xray body wbr,
 html.sl-xray body noscript {
   outline: none !important;
 }
-html.sl-xray .sl-fab-dock,
-html.sl-xray .sl-fab-dock *,
-html.sl-xray .sl-overlay-thumb,
-html.sl-xray .sl-panel,
-html.sl-xray .sl-panel *,
-html.sl-xray .sl-tip,
-html.sl-xray .sl-tip *,
-html.sl-xray .sl-tooltip,
-html.sl-xray .sl-tooltip *,
-html.sl-xray .sl-outline,
-html.sl-xray .sl-hover-outline,
-html.sl-xray .sl-multi-outline,
-html.sl-xray .sl-hatch,
-html.sl-xray .sl-hatch *,
-html.sl-xray .sl-hatch-preview,
-html.sl-xray .sl-hatch-preview *,
-html.sl-xray .sl-measure,
-html.sl-xray .sl-measure *,
-html.sl-xray .sl-settings,
-html.sl-xray .sl-settings *,
-html.sl-xray .sl-sheet,
-html.sl-xray .sl-sheet *,
-html.sl-xray .sl-size-cap,
-html.sl-xray .sl-size-bound,
-html.sl-xray .sl-size-bound *,
-html.sl-xray .sl-text-edit-fab,
-html.sl-xray .sl-hover-blocker,
-html.sl-xray .sl-live,
-html.sl-xray .sl-asset-toast,
-html.sl-xray .sl-edit-pop,
-html.sl-xray .sl-edit-pop *,
+html.sl-xray [data-sl-chrome],
+html.sl-xray [data-sl-chrome] *,
 html.sl-xray [data-sl-ignore],
 html.sl-xray [data-spec-ignore] {
   outline: none !important;
@@ -2120,6 +2119,7 @@ html.sl-dragging-pin * {
   outline: 2px solid var(--sl-focus-ring) !important;
   outline-offset: 2px !important;
 }
+/* Legacy aliases — product/demo use .sl-panel__handle / .sl-panel__grip. */
 .sl-panel__drag {
   display: flex;
   align-items: center;
@@ -2442,7 +2442,7 @@ html.sl-dragging-pin * {
   flex-wrap: nowrap;
   gap: 6px;
   padding: 0 8px 12px;
-  border-bottom: 1px solid var(--sl-border);
+  border: none;
   align-items: stretch;
 }
 .sl-states__label {
@@ -2603,63 +2603,70 @@ html.sl-dragging-pin * {
   white-space: nowrap;
   border: 0;
 }
-.sl-ed-text {
+/* Text content reuses the Field shell (`.sl-ed`): `--sl-border`, `--sl-r-xl`,
+   `--sl-surface-subtle`. Apply / Clear overlay the bottom; the textarea keeps
+   the native grabber (inset from the buttons). Cap height so a long node
+   cannot outgrow the panel. */
+.sl-ed.sl-ed-text {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 4px;
+  gap: 0;
   width: 100%;
   min-width: 0;
-  margin: 0;
+  min-height: 56px;
+  height: auto;
   padding: 0;
-  border: 0;
-  background: transparent;
-  border-radius: 0;
 }
-/* E — `resize: vertical` with no ceiling exposed the native grabber (the one
-   piece of unstyled browser UI in the panel) and let a long text node be
-   dragged taller than the panel's own scroll height. Capped, and the grabber
-   is hidden; the field still grows with its content up to the cap. */
+.sl-ed.sl-ed-text:focus-within,
+.sl-ed.sl-ed-text.is-edited:focus-within {
+  outline: none !important;
+  background: var(--sl-surface-subtle);
+  border-color: var(--sl-accent);
+  box-shadow: var(--sl-shadow-focus);
+}
 .sl-ed__textarea {
   box-sizing: border-box;
+  display: block;
   width: 100%;
   min-height: 56px;
   max-height: 200px;
   margin: 0;
   padding: var(--sl-space-6) var(--sl-space-8);
-  border: 1px solid var(--sl-border-control);
-  border-radius: var(--sl-r-lg);
-  background: var(--sl-surface-subtle);
+  padding-bottom: calc(var(--sl-space-16) + var(--sl-space-16));
+  border: 0;
+  background: transparent;
   color: var(--sl-fg);
   font-family: var(--sl-font-mono);
-  font-size: var(--sl-text-sm);
+  font-size: var(--sl-text-xs);
   line-height: 1.4;
+  letter-spacing: normal;
+  text-transform: none;
   resize: vertical;
   overflow: auto;
 }
-.sl-ed__textarea::-webkit-resizer {
-  display: none;
+.sl-ed__textarea:focus,
+.sl-ed__textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none;
 }
-.sl-ed__textarea:focus {
-  outline: 2px solid var(--sl-focus-ring) !important;
-  outline-offset: -2px !important;
-  border-color: var(--sl-accent);
-  background: var(--sl-surface);
-  box-shadow: var(--sl-shadow-focus);
-}
-.sl-ed__textarea[disabled] {
+.sl-ed-text:has(.sl-ed__textarea[disabled]) {
   opacity: var(--sl-disabled-opacity);
   color: var(--sl-fg-disabled);
   cursor: not-allowed;
 }
-.sl-ed__textarea[aria-invalid="true"] {
-  border-color: var(--sl-warning);
-  background: var(--sl-warning-bg);
+.sl-ed-text:has(.sl-ed__textarea[disabled]) .sl-ed__textarea {
+  resize: none;
 }
-/* E — the copy/revert pair hung under the textarea's LEFT edge with no top
-   margin, so it read as content of the field rather than actions on it.
-   Trailing edge, with the field's own gap for separation. */
+.sl-ed__textarea[disabled] {
+  color: var(--sl-fg-disabled);
+  cursor: not-allowed;
+}
 .sl-ed-text__actions {
+  position: absolute;
+  right: calc(var(--sl-space-16) + var(--sl-space-4));
+  bottom: var(--sl-space-4);
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -2737,7 +2744,11 @@ html.sl-dragging-pin * {
   outline: 2px solid var(--sl-focus-ring) !important;
   outline-offset: -2px !important;
 }
-.sl-section__head svg:first-child { flex: none; color: var(--sl-accent); }
+.sl-section__head > svg:first-of-type {
+  display: block;
+  flex: none;
+  color: var(--sl-accent);
+}
 /* Declared here, not inherited from .sl-section__head: the Tier-2 host-armour
    block sets `text-transform: none` and `color` on `.sl-panel *` directly, and
    a direct declaration always beats an inherited one. */
@@ -3324,8 +3335,7 @@ button.sl-val.is-ok { color: var(--sl-fg); }
 .sl-tip__hex { color: var(--sl-fg); font-weight: 600; }
 .sl-tip__hint { color: var(--sl-fg-secondary); font-size: var(--sl-text-2xs); font-family: var(--sl-font-ui); }
 
-/* Chrome tooltip (HeroUI-inspired) — replaces native title bubbles on panel/FAB.
-   Inverse surface via existing fg/surface tokens (no new colour roles).
+/* Chrome tooltip — inverse pill + speech tail. Tokens stay fg/surface.
    Colour copy tip stays .sl-tip. */
 .sl-tooltip {
   position: fixed;
@@ -3334,9 +3344,9 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   visibility: hidden;
   max-width: min(240px, calc(100vw - 16px));
   margin: 0;
-  padding: var(--sl-space-6) var(--sl-space-10);
+  padding: var(--sl-space-8) var(--sl-space-12);
   border: 0;
-  border-radius: var(--sl-r-lg);
+  border-radius: var(--sl-r-full);
   background: var(--sl-fg);
   color: var(--sl-surface);
   font-family: var(--sl-font-ui);
@@ -3347,9 +3357,28 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   pointer-events: none;
   white-space: normal;
   overflow-wrap: anywhere;
+  overflow: visible;
   opacity: 0;
   transform: translateY(2px);
+  --sl-tooltip-arrow: 50%;
   transition: opacity var(--sl-dur-1) var(--sl-ease), transform var(--sl-dur-1) var(--sl-ease), visibility 0s linear var(--sl-dur-1);
+}
+.sl-tooltip::after {
+  content: '';
+  position: absolute;
+  left: var(--sl-tooltip-arrow);
+  width: var(--sl-space-6);
+  height: var(--sl-space-6);
+  border-radius: var(--sl-space-2);
+  background: var(--sl-fg);
+  transform: translateX(-50%) rotate(45deg);
+  pointer-events: none;
+}
+.sl-tooltip[data-placement="bottom"]::after {
+  top: calc(var(--sl-space-6) / -2);
+}
+.sl-tooltip:not([data-placement="bottom"])::after {
+  bottom: calc(var(--sl-space-6) / -2);
 }
 .sl-tooltip.is-visible {
   visibility: visible;
@@ -3427,15 +3456,52 @@ button.sl-val.is-ok { color: var(--sl-fg); }
 }
 .sl-panel__grip svg { display: block; }
 .sl-panel__tabs {
-  display: flex;
+  /* Underline track + sliding accent bar (same --*-i trick as Segmented). */
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
   flex-wrap: nowrap;
   align-items: stretch;
-  gap: var(--sl-space-2);
-  padding: 0 var(--sl-space-4) var(--sl-space-4);
-  border-bottom: 0;
+  gap: 0;
+  padding: 0 var(--sl-space-4);
+  border: none;
+  --sl-tab-n: 5;
+  --sl-tab-i: 0;
+  transition: --sl-tab-i var(--sl-dur-2) var(--sl-ease);
+}
+.sl-panel__tabs:not(:has(> :nth-child(3))) { --sl-tab-n: 2; }
+.sl-panel__tabs:has(> :nth-child(4)) { --sl-tab-n: 4; }
+.sl-panel__tabs:has(> :nth-child(5)) { --sl-tab-n: 5; }
+.sl-panel__tabs:has(> :nth-child(6)) { --sl-tab-n: 6; }
+.sl-panel__tabs:has(> :nth-child(1).is-on),
+.sl-panel__tabs:has(> :nth-child(1)[aria-selected="true"]) { --sl-tab-i: 0; }
+.sl-panel__tabs:has(> :nth-child(2).is-on),
+.sl-panel__tabs:has(> :nth-child(2)[aria-selected="true"]) { --sl-tab-i: 1; }
+.sl-panel__tabs:has(> :nth-child(3).is-on),
+.sl-panel__tabs:has(> :nth-child(3)[aria-selected="true"]) { --sl-tab-i: 2; }
+.sl-panel__tabs:has(> :nth-child(4).is-on),
+.sl-panel__tabs:has(> :nth-child(4)[aria-selected="true"]) { --sl-tab-i: 3; }
+.sl-panel__tabs:has(> :nth-child(5).is-on),
+.sl-panel__tabs:has(> :nth-child(5)[aria-selected="true"]) { --sl-tab-i: 4; }
+.sl-panel__tabs:has(> :nth-child(6).is-on),
+.sl-panel__tabs:has(> :nth-child(6)[aria-selected="true"]) { --sl-tab-i: 5; }
+.sl-panel__tabs::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: var(--sl-space-4);
+  bottom: 0;
+  width: calc((100% - (2 * var(--sl-space-4))) / var(--sl-tab-n));
+  height: 2px;
+  border-radius: var(--sl-r-full);
+  background: var(--sl-accent);
+  transform: translateX(calc(var(--sl-tab-i) * 100%));
+  pointer-events: none;
 }
 .sl-panel__tab {
   position: relative;
+  z-index: 1;
   flex: 1 1 0;
   display: inline-flex;
   align-items: center;
@@ -3443,11 +3509,10 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   width: auto;
   height: 36px;
   min-height: 36px;
-  margin: 0 0 -1px;
+  margin: 0;
   padding: 0;
   border: 0;
-  border-bottom: 1px solid transparent;
-  border-radius: 0;
+  border-radius: var(--sl-r-xl);
   background: transparent;
   color: var(--sl-fg-secondary);
   font-family: var(--sl-font-ui);
@@ -3457,25 +3522,50 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   text-align: center;
   white-space: nowrap;
   cursor: pointer !important;
-  transition-property: color, border-color, background-color, transform;
+  transition-property: transform;
   transition-duration: var(--sl-dur-1);
   transition-timing-function: var(--sl-ease);
 }
+/* Hover chip inset so it does not cover the 2px accent bar. Icon ink
+   must not change — only this fill. */
+.sl-panel__tab::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset: var(--sl-space-2) var(--sl-space-2) var(--sl-space-4);
+  border-radius: var(--sl-r-xl);
+  background: transparent;
+  pointer-events: none;
+  transition: background-color var(--sl-dur-1) var(--sl-ease);
+}
+/* Pin glyph color on the SVG itself. Inherit from the button would pick
+   up hover/theme mistakes; `.sl-panel * { color }` would pin them to --sl-fg. */
+.sl-panel .sl-panel__tab-ico,
+.sl-panel .sl-panel__tab-ico * {
+  color: var(--sl-fg-secondary);
+}
+.sl-panel .sl-panel__tab.is-on .sl-panel__tab-ico,
+.sl-panel .sl-panel__tab.is-on .sl-panel__tab-ico *,
+.sl-panel .sl-panel__tab[aria-selected="true"] .sl-panel__tab-ico,
+.sl-panel .sl-panel__tab[aria-selected="true"] .sl-panel__tab-ico * {
+  color: var(--sl-accent);
+}
 .sl-panel__tab-ico {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   margin: 0;
 }
 .sl-panel__tab-ico svg {
   display: block;
-  width: 14px;
-  height: 14px;
 }
 .sl-panel__tab-count {
   position: absolute;
+  z-index: 1;
   top: 0;
   right: calc(50% - 18px);
   box-sizing: border-box;
@@ -3495,15 +3585,12 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   pointer-events: none;
 }
 .sl-panel__tab-count[hidden] { display: none !important; }
-.sl-panel__tab:hover {
-  color: var(--sl-fg);
-  background: transparent;
+.sl-panel__tab:hover::before {
+  background: var(--sl-surface-muted);
 }
 .sl-panel__tab.is-on,
 .sl-panel__tab[aria-selected="true"] {
-  color: var(--sl-accent-soft-fg);
-  background: transparent;
-  border-bottom-color: var(--sl-accent-soft-fg);
+  color: var(--sl-accent);
 }
 /* Keeps the outline. The old rule set `outline: none` and substituted a
    box-shadow at 1.12:1 — a host `button:focus{box-shadow:none!important}`
@@ -4566,6 +4653,7 @@ button.sl-val.is-ok { color: var(--sl-fg); }
 .sl-ed__hex[disabled],
 .sl-ed__sel[disabled],
 .sl-ed__expand[disabled],
+.sl-add[disabled],
 .sl-ed__add[disabled],
 .sl-ed__cap-remove[disabled],
 .sl-var-btn[disabled] {
@@ -4832,23 +4920,26 @@ button.sl-val.is-ok { color: var(--sl-fg); }
 .sl-ed:has(> .sl-ed__main) > .sl-dd--unit {
   position: relative;
   z-index: 0;
-  flex: 0 0 27px;
-  width: 27px;
+  flex: 0 0 auto;
+  width: fit-content;
+  min-width: 27px;
   align-self: stretch;
   margin: 0;
 }
 .sl-ed:has(> .sl-ed__main) .sl-dd--unit .sl-dd__trigger {
-  width: 27px;
+  width: fit-content;
   min-width: 27px;
-  max-width: 27px;
-  padding: 0;
+  max-width: none;
+  padding: 0 var(--sl-space-4);
   border-radius: 0;
   color: var(--sl-fg-muted);
   font-family: var(--sl-font-ui);
   font-size: var(--sl-text-sm);
   background: transparent;
 }
-/* Paper: unit hover = full right cell #F7F7F7 → nearest --sl-surface-muted */
+.sl-ed:has(> .sl-ed__main) .sl-dd--unit .sl-dd__value {
+  white-space: nowrap;
+}
 .sl-ed:has(> .sl-ed__main) .sl-dd--unit .sl-dd__trigger:hover,
 .sl-ed:has(> .sl-ed__main) .sl-dd--unit .sl-dd__trigger[aria-expanded="true"] {
   color: var(--sl-fg-muted);
@@ -5734,24 +5825,43 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   font-style: italic;
 }
 .sl-ed__expand,
+.sl-add,
 .sl-ed__add {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin: 0;
-  padding: 2px;
-  min-width: 34px;
   min-height: 34px;
   border: 1px solid var(--sl-border);
   border-radius: var(--sl-r-xl);
   background: var(--sl-surface-subtle);
   color: var(--sl-fg-secondary);
-  font-family: inherit;
+  font-family: var(--sl-font-ui);
   font-size: var(--sl-text-xs);
   line-height: 1;
   cursor: pointer;
 }
+.sl-ed__expand {
+  padding: 2px;
+  min-width: 34px;
+}
+.sl-add,
+.sl-ed__add {
+  box-sizing: border-box;
+  gap: var(--sl-space-4);
+  padding: 0 var(--sl-space-10);
+  min-width: 0;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.sl-add--icon,
+.sl-ed__add--muted {
+  padding: 2px;
+  min-width: 34px;
+  font-weight: 400;
+}
 .sl-ed__expand:hover,
+.sl-add:hover,
 .sl-ed__add:hover {
   color: var(--sl-fg);
   background: var(--sl-surface-muted);
@@ -5766,12 +5876,14 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   line-height: 1.3;
 }
 .sl-ed__expand:active,
+.sl-add:active,
 .sl-ed__add:active,
 .sl-ed__align:active,
 .sl-ed-alignbox__cell:active {
   transform: scale(0.96);
 }
 .sl-ed__expand:focus-visible,
+.sl-add:focus-visible,
 .sl-ed__add:focus-visible,
 .sl-ed__align:focus-visible,
 .sl-ed-alignbox__cell:focus-visible {
@@ -6358,6 +6470,16 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   flex: 0 1 auto;
   min-width: 0;
 }
+/* Weight / keyword bound fields have no unit cell — hug the pill, do not
+   stretch the token under a trailing chevron. */
+.sl-ed:has(> .sl-ed__main):not(:has(> .sl-dd--unit)):not(:has(> .sl-ed__opacity)) > .sl-ed__main > .sl-ed__tok,
+.sl-ed:not(:has(> .sl-ed__main)) > .sl-ed__tok {
+  flex: 0 1 auto;
+}
+.sl-ed:has(> .sl-ed__main):not(:has(> .sl-dd--unit)):not(:has(> .sl-ed__opacity)) .sl-ed__tok-detach,
+.sl-ed:not(:has(> .sl-ed__main)) .sl-ed__tok-detach {
+  margin-left: 0;
+}
 /* Colour: bundle grows for Remove pin; face hugs the token name (+ fade). */
 .sl-ed-color > .sl-ed__main > .sl-ed__tok {
   /* Grow so Remove pins to the trailing edge of main; face itself hugs text. */
@@ -6877,6 +6999,7 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   /* Travel is removed at rest and under interaction alike.
      Index vars animate on the track; kill those too under reduce. */
   .sl-seg,
+  .sl-panel__tabs,
   .sl-ed__align-group {
     transition: none;
   }
@@ -6892,6 +7015,7 @@ button.sl-val.is-ok { color: var(--sl-fg); }
   .sl-panel__copy-block:active,
   .sl-panel__copy-fmt:active,
   .sl-ed__expand:active,
+  .sl-add:active,
   .sl-ed__add:active,
   .sl-ed__align:active,
   .sl-ed-alignbox__cell:active,

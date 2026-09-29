@@ -10,6 +10,7 @@ const ROWS = [
 export const copyScene: Scene = {
   id: 'copy',
   eyebrow: 'Copy changes',
+  icon: 'clipboard',
   title: 'Copy the exact change. Your agent gets was → want, not a screenshot.',
   body: 'Element identity plus the values you actually set. Not a guess. The change.',
   stateLabels: { a: 'The page', b: 'The handoff' },

@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+import { ArrowRight, FolderKanban, House, Inbox, Kanban, Lock, Mail, Radio, Settings, Users } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Hatch, Outline, SizeChip } from '../chrome/Hatch';
 import './host.css';
 
@@ -33,20 +35,40 @@ function Pin({
 }) {
   if (pinned !== id) return <>{children}</>;
   return (
-    <div className="host-pin">
+    <div className={`host-pin host-pin--${id}`}>
       <Outline />
-      {hatch ? <Hatch value={sizeLabel?.replace(/\D.*/, '') || '16'} /> : null}
+      {hatch ? <Hatch value="16" /> : null}
       {sizeLabel ? <SizeChip label={sizeLabel} /> : null}
       {children}
     </div>
   );
 }
 
-const CARDS = [
-  { title: 'Inbox', body: '12 threads waiting on a reply.' },
-  { title: 'Pipeline', body: 'Four deals moved this week.' },
-  { title: 'Team', body: 'Maya joined billing last Tuesday.' },
+const NAV: { label: string; icon: LucideIcon; on?: boolean }[] = [
+  { label: 'Home', icon: House, on: true },
+  { label: 'Projects', icon: FolderKanban },
+  { label: 'Settings', icon: Settings },
 ];
+
+const CARDS: { title: string; body: string; icon: LucideIcon }[] = [
+  { title: 'Inbox', body: '12 threads waiting on a reply.', icon: Inbox },
+  { title: 'Pipeline', body: 'Four deals moved this week.', icon: Kanban },
+  { title: 'Team', body: 'Maya joined billing last Tuesday.', icon: Users },
+];
+
+function Card({ title, body, icon: Glyph, duplicate = false }: { title: string; body: string; icon: LucideIcon; duplicate?: boolean }) {
+  return (
+    <article className={`host-card${duplicate ? ' is-duplicate' : ''}`}>
+      <div className="host-card__top">
+        <span className="host-card__icon" aria-hidden="true">
+          <Glyph size={16} strokeWidth={2} />
+        </span>
+        <strong>{title}</strong>
+      </div>
+      <p>{body}</p>
+    </article>
+  );
+}
 
 export function HostApp({ width = 'desktop', pinned = null, tweaks = {} }: HostProps) {
   const ctaClass = [
@@ -60,17 +82,17 @@ export function HostApp({ width = 'desktop', pinned = null, tweaks = {} }: HostP
   return (
     <div className={`host-app${width === 'phone' ? ' host-app--phone' : ''}`}>
       <aside className="host-app__side">
-        <p className="host-app__brand">Relay</p>
+        <p className="host-app__brand">
+          <Radio size={16} strokeWidth={2} aria-hidden="true" />
+          Relay
+        </p>
         <nav className="host-app__nav" aria-label="Relay">
-          <button type="button" className="is-on" tabIndex={-1}>
-            Home
-          </button>
-          <button type="button" tabIndex={-1}>
-            Projects
-          </button>
-          <button type="button" tabIndex={-1}>
-            Settings
-          </button>
+          {NAV.map(({ label, icon: Glyph, on }) => (
+            <button type="button" className={on ? 'host-app__nav-btn is-current' : 'host-app__nav-btn'} tabIndex={-1} key={label}>
+              <Glyph size={16} strokeWidth={2} aria-hidden="true" />
+              {label}
+            </button>
+          ))}
         </nav>
       </aside>
       <div className="host-app__main">
@@ -88,25 +110,27 @@ export function HostApp({ width = 'desktop', pinned = null, tweaks = {} }: HostP
             <h3>Sign in</h3>
             <label>
               Email
-              <input type="email" defaultValue="maya@relay.app" readOnly />
+              <span className="host-login__field">
+                <Mail className="host-login__glyph" size={16} strokeWidth={2} aria-hidden="true" />
+                <input type="email" defaultValue="maya@relay.app" readOnly />
+              </span>
             </label>
             <label>
               Password
-              <input type="password" defaultValue="········" readOnly />
+              <span className="host-login__field">
+                <Lock className="host-login__glyph" size={16} strokeWidth={2} aria-hidden="true" />
+                <input type="password" defaultValue="········" readOnly />
+              </span>
             </label>
             <button type="button" className="host-login__submit" tabIndex={-1}>
               Continue
+              <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
             </button>
           </form>
         </Pin>
         <div className="host-cards">
           {CARDS.map((card, index) => {
-            const node = (
-              <article className={`host-card${tweaks.duplicatedCard && index === 1 ? ' is-duplicate' : ''}`} key={card.title}>
-                <strong>{card.title}</strong>
-                <p>{card.body}</p>
-              </article>
-            );
+            const node = <Card key={card.title} {...card} duplicate={tweaks.duplicatedCard && index === 1} />;
             if (index !== 1) return node;
             return (
               <Pin key={card.title} id="card" pinned={pinned} hatch={tweaks.hatch} sizeLabel={tweaks.sizeLabel}>
@@ -114,12 +138,7 @@ export function HostApp({ width = 'desktop', pinned = null, tweaks = {} }: HostP
               </Pin>
             );
           })}
-          {tweaks.duplicatedCard ? (
-            <article className="host-card is-duplicate">
-              <strong>Pipeline</strong>
-              <p>Four deals moved this week.</p>
-            </article>
-          ) : null}
+          {tweaks.duplicatedCard ? <Card {...CARDS[1]} duplicate /> : null}
         </div>
       </div>
     </div>

@@ -24,6 +24,14 @@ const PATHS: Record<string, string> = {
   'side-right': '<rect width="18" height="18" x="3" y="3" rx="2" opacity=".35"/><path d="M21 3v18" stroke-width="3"/>',
   'side-bottom': '<rect width="18" height="18" x="3" y="3" rx="2" opacity=".35"/><path d="M3 21h18" stroke-width="3"/>',
   'side-left': '<rect width="18" height="18" x="3" y="3" rx="2" opacity=".35"/><path d="M3 3v18" stroke-width="3"/>',
+  'corner-tr':
+    '<g transform="rotate(0 12 12)"><path d="M21 11a8 8 0 0 0-8-8"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></g>',
+  'corner-br':
+    '<g transform="rotate(90 12 12)"><path d="M21 11a8 8 0 0 0-8-8"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></g>',
+  'corner-bl':
+    '<g transform="rotate(180 12 12)"><path d="M21 11a8 8 0 0 0-8-8"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></g>',
+  'corner-tl':
+    '<g transform="rotate(270 12 12)"><path d="M21 11a8 8 0 0 0-8-8"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></g>',
 };
 
 type IconName = keyof typeof PATHS;

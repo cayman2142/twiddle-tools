@@ -1,18 +1,77 @@
+import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { BrandMark } from './BrandMark';
 import { CtaButton } from './CtaButton';
+import { NotchLeftWing, NotchRightWing } from './NotchWings';
+
+const LINKS = [
+  { href: '#pain', label: 'Features' },
+  { href: '#copy', label: 'How it works' },
+  { href: '/privacy', label: 'Privacy' },
+];
+
+function Brand() {
+  return (
+    <a className="site-nav__brand" href="/">
+      <BrandMark mark="lockup" size="sm" onDark />
+    </a>
+  );
+}
+
+function Links() {
+  return (
+    <nav className="site-nav__links" aria-label="Page">
+      {LINKS.map((link) => (
+        <a key={link.href} href={link.href}>
+          {link.label}
+        </a>
+      ))}
+    </nav>
+  );
+}
 
 export function Nav() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <header className="site-nav">
-      <a className="site-nav__brand" href="/">
-        <span className="site-nav__name">Twiddle</span>
-        <span className="site-nav__desc">tell the agent exactly</span>
-      </a>
-      <nav className="site-nav__links" aria-label="Page">
-        <a href="#pain">Features</a>
-        <a href="#copy">How it works</a>
-        <a href="/privacy">Privacy</a>
-      </nav>
-      <CtaButton />
+    <header className="site-notch">
+      <div className="site-notch__menu">
+        <NotchLeftWing />
+        <Brand />
+        <Links />
+        <CtaButton />
+        <NotchRightWing />
+      </div>
+
+      <div className="site-notch__island">
+        <NotchLeftWing />
+        <Brand />
+        <button
+          type="button"
+          className="site-notch__menu-btn"
+          aria-expanded={open}
+          aria-controls="site-notch-drawer"
+          onClick={() => setOpen((value) => !value)}
+        >
+          Menu
+          <ChevronDown size={16} strokeWidth={2} aria-hidden="true" className={open ? 'is-open' : undefined} />
+        </button>
+        <CtaButton />
+        <NotchRightWing />
+        <div
+          id="site-notch-drawer"
+          className={`site-notch__drawer${open ? ' is-open' : ''}`}
+          hidden={!open}
+        >
+          <nav aria-label="Page">
+            {LINKS.map((link) => (
+              <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </div>
     </header>
   );
 }

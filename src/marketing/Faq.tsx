@@ -1,3 +1,23 @@
+import { Thiing } from './Thiing';
+
+const ITEMS = [
+  {
+    icon: 'laptop',
+    title: 'Where does it run?',
+    body: 'Chrome, on any ordinary live page — localhost, preview, or production.',
+  },
+  {
+    icon: 'robot',
+    title: 'Which agent?',
+    body: 'Any agent via the clipboard. twiddle does not need a bridge or an MCP config.',
+  },
+  {
+    icon: 'clipboard',
+    title: 'Is it free?',
+    body: 'Free while we test. A paid plan comes later; anyone who installs during beta keeps an early-supporter discount.',
+  },
+];
+
 export function Faq() {
   return (
     <section className="site-section" id="faq">
@@ -9,18 +29,13 @@ export function Faq() {
         </p>
       </div>
       <div className="site-faq">
-        <div>
-          <h3>Where does it run?</h3>
-          <p>Chrome, on any ordinary live page — localhost, preview, or production.</p>
-        </div>
-        <div>
-          <h3>Which agent?</h3>
-          <p>Any agent via the clipboard. Twiddle does not need a bridge or an MCP config.</p>
-        </div>
-        <div>
-          <h3>Is it free?</h3>
-          <p>Free while we test. A paid plan comes later; anyone who installs during beta keeps an early-supporter discount.</p>
-        </div>
+        {ITEMS.map((item) => (
+          <div className="site-faq__item" key={item.title}>
+            <Thiing name={item.icon} alt="" size="lg" />
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </div>
+        ))}
       </div>
     </section>
   );

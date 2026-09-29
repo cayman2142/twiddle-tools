@@ -26,10 +26,6 @@ html {
   --tw-space-6: 24px;
   --tw-space-8: 32px;
   --tw-space-12: 48px;
-}
-
-html:not([data-sl-theme]),
-html[data-sl-theme='light'] {
   --tw-bg: var(--sl-gray-1);
   --tw-surface: var(--sl-white);
   --tw-fg: var(--sl-gray-12);
@@ -40,17 +36,7 @@ html[data-sl-theme='light'] {
   --tw-accent: var(--sl-blue-9);
   --tw-accent-solid: var(--sl-blue-11);
   --tw-focus-ring: var(--sl-blue-9);
+  --tw-bezel: var(--sl-gray-12);
+  --tw-fg-on-bezel: var(--sl-fg-on-accent);
 }
 
-html[data-sl-theme='dark'] {
-  --tw-bg: var(--sl-gray-1);
-  --tw-surface: var(--sl-gray-2);
-  --tw-fg: var(--sl-gray-12);
-  --tw-fg-secondary: var(--sl-gray-11);
-  --tw-fg-muted: var(--sl-gray-10a);
-  --tw-fg-on-accent: var(--sl-fg-on-accent);
-  --tw-border: var(--sl-gray-7);
-  --tw-accent: var(--sl-blue-9);
-  --tw-accent-solid: var(--sl-blue-8);
-  --tw-focus-ring: var(--sl-blue-9);
-}

@@ -1,25 +1,60 @@
-/* Park product chrome inside a scene card. Product CSS uses position:fixed
- * and a 21474836xx z-band for host pages; that would escape the marketing frame. */
+/* Chrome overlays the staged page, as the plugin does on a live site.
+ * Product CSS is position:fixed + a 21474836xx z-band; that must not escape
+ * the marketing card. Remaps apply only to staged replicas inside
+ * .scene-stage — never to live plugin chrome marked [data-sl-chrome]. */
 
 .scene-stage {
   position: relative;
+  display: block;
   isolation: isolate;
   overflow: hidden;
+  min-height: 520px;
   background: var(--tw-surface);
   border: 1px solid var(--tw-border);
   border-radius: var(--sl-r-3xl);
   box-shadow: var(--sl-shadow-panel);
-  min-height: 520px;
 }
 
 .scene-stage__host {
-  position: relative;
-  z-index: 1;
-  min-height: 520px;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  isolation: isolate;
+  container: host / inline-size;
 }
 
-.scene-stage .sl-panel,
-.scene-stage .sl-fab-dock,
+.scene-stage__host > * {
+  height: 100%;
+}
+
+.site-hero .scene-stage {
+  min-height: 640px;
+}
+
+.scene-stage .sl-panel:not([data-sl-chrome]),
+.scene-stage .sl-panel.is-visible:not([data-sl-chrome]) {
+  position: absolute !important;
+  top: var(--sl-space-4);
+  right: var(--sl-space-4);
+  left: auto;
+  bottom: auto;
+  width: 340px;
+  margin: 0;
+  max-height: calc(100% - 96px);
+  display: flex;
+  z-index: 6;
+}
+
+.scene-stage .sl-fab-dock {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: var(--sl-space-4) !important;
+  top: auto !important;
+  padding: 0 var(--sl-space-8);
+  z-index: 7;
+}
+
 .scene-stage .sl-hatch,
 .scene-stage .sl-hatch-preview,
 .scene-stage .sl-hatch__band,
@@ -28,31 +63,46 @@
 .scene-stage .sl-hover-outline,
 .scene-stage .sl-change-badges {
   position: absolute !important;
-  z-index: 4 !important;
 }
 
-.scene-stage .sl-panel.is-visible {
-  top: var(--tw-space-4);
-  right: var(--tw-space-4);
-  max-height: calc(100% - 96px);
-  display: flex;
+.scene-stage .sl-outline {
+  inset: calc(var(--sl-space-2) * -1);
+  display: block;
+  box-shadow: none;
+  border-radius: inherit;
+  z-index: 2;
 }
 
-.scene-stage .sl-fab-dock {
-  left: 0;
-  right: 0;
-  bottom: var(--tw-space-4);
-  top: auto;
+.scene-stage .sl-outline.is-live,
+.scene-stage .sl-hover-outline.is-live,
+.scene-stage .sl-hatch.sl-hatch--live {
+  top: var(--live-t) !important;
+  left: var(--live-l) !important;
+  width: var(--live-w) !important;
+  height: var(--live-h) !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 5;
+}
+
+.scene-stage .sl-outline.is-live,
+.scene-stage .sl-hover-outline.is-live {
+  border-radius: var(--live-r, 0);
+}
+
+.scene-stage .sl-hover-outline.is-live {
+  display: block;
 }
 
 .scene-stage .sl-hatch,
 .scene-stage .sl-hatch-preview {
   inset: 0;
   display: block;
+  z-index: 3;
 }
 
 .scene-stage .sl-hatch__band {
-  position: absolute !important;
+  z-index: 3;
 }
 
 .scene-stage .sl-hatch__band--top {
@@ -68,38 +118,43 @@
 }
 
 .scene-stage .sl-hatch__band--left {
-  top: 0;
-  bottom: 0;
+  top: var(--space-4, 16px);
+  bottom: var(--space-4, 16px);
   left: 0;
 }
 
 .scene-stage .sl-hatch__band--right {
-  top: 0;
-  bottom: 0;
+  top: var(--space-4, 16px);
+  bottom: var(--space-4, 16px);
   right: 0;
-}
-
-.scene-stage .sl-hatch__band--pad {
-  background: repeating-linear-gradient(
-    45deg,
-    color-mix(in srgb, var(--sl-role-pad-9) 36%, transparent) 0 var(--sl-space-4),
-    transparent var(--sl-space-4) var(--sl-space-8)
-  );
-}
-
-.scene-stage .sl-outline {
-  inset: calc(var(--sl-space-2) * -1);
-  display: block;
-  box-shadow: none;
-  border-radius: inherit;
 }
 
 .scene-stage .sl-size-cap {
   display: block;
-  top: calc(var(--sl-space-8) * -1);
-  left: 50%;
-  transform: translateX(-50%);
   white-space: nowrap;
+  z-index: 4;
+}
+
+.scene-stage .host-pin--cta .sl-size-cap,
+.scene-stage .host-pin--login .sl-size-cap,
+.scene-stage .host-pin--card .sl-size-cap {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none;
+  width: max-content;
+  margin: 0 auto var(--sl-space-2);
+}
+
+.scene-stage .host-pin--login .sl-size-cap,
+.scene-stage .host-pin--card .sl-size-cap {
+  margin-left: 0;
+}
+
+.scene-stage .sl-toolbar {
+  max-width: 100%;
 }
 
 .scene-stage .host-pin {
@@ -107,13 +162,26 @@
   z-index: 2;
 }
 
+.scene-stage .host-pin--cta {
+  display: inline-block;
+  width: max-content;
+  max-width: 100%;
+  margin-top: var(--tw-space-8);
+}
+
+.scene-stage .host-pin--login,
+.scene-stage .host-pin--card {
+  display: block;
+  width: 100%;
+}
+
 .scene-payload {
   position: absolute;
-  z-index: 5;
   left: var(--tw-space-4);
-  right: calc(340px + var(--tw-space-8));
-  bottom: calc(var(--tw-space-12) + var(--tw-space-8));
-  max-width: 36rem;
+  bottom: calc(var(--tw-space-12) + var(--tw-space-4));
+  z-index: 5;
+  margin: 0;
+  max-width: var(--tw-measure);
   padding: var(--tw-space-4);
   background: var(--sl-surface);
   color: var(--sl-fg);
@@ -131,5 +199,43 @@
   font-family: var(--sl-font-ui);
   font-size: var(--sl-text-2xs);
   font-weight: 600;
-  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .scene-stage {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .scene-stage__host {
+    position: relative;
+    inset: auto;
+    min-height: 400px;
+    flex: none;
+  }
+
+  .scene-stage .sl-panel,
+  .scene-stage .sl-panel.is-visible {
+    position: relative !important;
+    top: auto;
+    right: auto;
+    inset: auto;
+    width: auto;
+    max-width: 340px;
+    max-height: none;
+    margin: var(--tw-space-4);
+  }
+
+  .scene-stage .sl-fab-dock {
+    position: relative !important;
+    inset: auto !important;
+    padding: var(--tw-space-3) var(--tw-space-4) var(--tw-space-4);
+  }
+
+  .scene-payload {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    margin: var(--tw-space-4);
+  }
 }

@@ -5,6 +5,7 @@ import type { Scene } from './types';
 export const adaptiveScene: Scene = {
   id: 'adaptive',
   eyebrow: 'Adaptive',
+  icon: 'phone',
   title: 'Phone, tablet, desktop at real widths. Media queries actually run.',
   body: 'The same Relay page at a real phone width. The login moves under the hero because the layout is width, not a device emulator.',
   stateLabels: { a: 'Desktop', b: 'Phone' },

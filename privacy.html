@@ -1,36 +1,48 @@
 <!doctype html>
-<html lang="en" data-sl-theme="light">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Twiddle Privacy Policy</title>
+    <title>twiddle Privacy Policy</title>
     <link rel="stylesheet" href="/src/app/tokens.css" />
     <link rel="stylesheet" href="/src/app/base.css" />
     <link rel="stylesheet" href="/src/marketing/marketing.css" />
   </head>
   <body>
-    <header class="site-nav">
-      <a class="site-nav__brand" href="/">
-        <span class="site-nav__name">Twiddle</span>
-        <span class="site-nav__desc">tell the agent exactly</span>
-      </a>
-      <a href="/">Home</a>
-    </header>
+    <div class="site-shell">
+      <div class="site-frame">
+        <header class="site-notch">
+          <div class="site-notch__menu">
+            <a class="site-nav__brand" href="/">
+              <img class="site-logo site-logo--sm site-logo--lockup" src="/lockup-on-dark.svg" alt="twiddle" />
+            </a>
+            <a href="/">Home</a>
+          </div>
+          <div class="site-notch__island">
+            <a class="site-nav__brand" href="/">
+              <img class="site-logo site-logo--sm site-logo--lockup" src="/lockup-on-dark.svg" alt="twiddle" />
+            </a>
+            <a href="/">Home</a>
+          </div>
+        </header>
     <main class="site-doc">
       <h1>Twiddle Privacy Policy</h1>
       <p class="site-meta">
-        Effective: 19 September 2026<br />
+        Effective: 21 September 2026<br />
         Product: Twiddle Chrome extension (build 0.1.6)<br />
         Controller: Artem Pirog<br />
-        Contact: <a href="mailto:caymnjke@gmail.com">caymnjke@gmail.com</a>
+        Contact: <a href="mailto:privacy@twiddle.tools">privacy@twiddle.tools</a>
       </p>
       <p>This policy describes how Twiddle handles data today. It is written for Chrome Web Store review and for people who send feedback.</p>
       <h2>1. What Twiddle is</h2>
       <p>Twiddle helps a designer or product person inspect visual properties and design tokens on a live page, make temporary visual or structural edits, preview responsive layouts, and copy a handoff. It is not a page saver, it has no account system in this build, and it does not download or execute remote code.</p>
       <h2>2. What we do not collect</h2>
       <p>Twiddle does not run analytics, ads, crash telemetry, or account sync in this build. Inspect, edit, token analysis, Adaptive preview, copied handoffs, and element screenshots stay on your machine unless you press Send report.</p>
-      <p>Turning Twiddle on, opening Adaptive, or turning Device UA on does not send page content to us. Device UA only rewrites request headers and page-visible device APIs in Adaptive iframes on the site you granted, so that site’s own servers see a phone or tablet profile. That traffic goes to the site you are reviewing, not to Twiddle.</p>
+      <p>Turning Twiddle on or opening Adaptive does not send page content to us. Adaptive previews real viewport widths so CSS @media runs. This build does not ask for site access and does not rewrite User-Agent. Device UA is parked; if it returns, this policy will be updated first.</p>
       <h2>3. What we collect, and only after Send</h2>
       <p>Collection happens only when you open Leave feedback and press Send report.</p>
       <ul>
@@ -42,8 +54,8 @@
       <p>Purpose: product support, debugging, and a reply if you left an email. We do not sell this data or use it for ads, creditworthiness, or unrelated profiling.</p>
       <h2>4. Who receives it</h2>
       <ol>
-        <li><a href="https://formsubmit.co">FormSubmit</a> — HTTPS relay that emails the submission. Their policy: <a href="https://formsubmit.co/privacy.pdf">formsubmit.co/privacy.pdf</a>.</li>
-        <li>The receiving mailbox — currently Gmail, operated by Google. Policy: <a href="https://policies.google.com/privacy">policies.google.com/privacy</a>.</li>
+        <li><a href="https://formsubmit.co">FormSubmit</a> — HTTPS relay that emails the submission to <a href="mailto:privacy@twiddle.tools">privacy@twiddle.tools</a>. Their policy: <a href="https://formsubmit.co/privacy.pdf">formsubmit.co/privacy.pdf</a>.</li>
+        <li>The receiving mailbox — <a href="mailto:privacy@twiddle.tools">privacy@twiddle.tools</a>. Cloudflare Email Routing forwards it to the operator’s mailbox hosted by Google (Gmail). Policy: <a href="https://policies.google.com/privacy">policies.google.com/privacy</a>.</li>
       </ol>
       <p>No other third party is used for feedback in this build. FormSubmit’s response is read as status data only; Twiddle does not execute returned scripts.</p>
       <h2>5. Local copies</h2>
@@ -57,14 +69,16 @@
       <h2>7. Security</h2>
       <p>Feedback is sent over HTTPS to FormSubmit. We do not ask for passwords, cookies, or authentication tokens. Do not attach secrets, and do not send a report from a page you are not allowed to share.</p>
       <h2>8. Permissions</h2>
-      <p>Chrome may ask for the current site only when you turn Device UA on in Adaptive. That grant is not used to upload the page to us. The toolbar icon or Alt+Shift+S injects the inspector on the active tab.</p>
+      <p>This build asks for activeTab, scripting, and storage only. The toolbar icon or Alt+Shift+S injects the inspector on the active tab. This build does not ask for site access and does not rewrite User-Agent.</p>
       <h2>9. Children</h2>
       <p>Twiddle is not directed at children under 13. We do not knowingly collect their data.</p>
       <h2>10. Changes</h2>
       <p>If collection, processors, or purposes change, this policy and the Chrome Web Store privacy-practices form will be updated before that build ships.</p>
       <h2>11. Contact</h2>
-      <p>Privacy and deletion: <a href="mailto:caymnjke@gmail.com">caymnjke@gmail.com</a></p>
-      <p>Product mail (after Email Routing): <code>privacy@twiddle.tools</code>, <code>hello@twiddle.tools</code>.</p>
+      <p>Privacy and deletion: <a href="mailto:privacy@twiddle.tools">privacy@twiddle.tools</a></p>
+      <p>Product mail: <a href="mailto:hello@twiddle.tools">hello@twiddle.tools</a></p>
     </main>
+      </div>
+    </div>
   </body>
 </html>

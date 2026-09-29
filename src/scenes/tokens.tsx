@@ -5,6 +5,7 @@ import type { Scene } from './types';
 export const tokensScene: Scene = {
   id: 'tokens',
   eyebrow: "This page's tokens",
+  icon: 'palette',
   title: "Bind color and space to the page's own tokens. Off-scale is called out.",
   body: 'Typed 24 stays 24 — we do not guess. Apply token is explicit. Off-scale is a verdict on this page, not a Figma file.',
   stateLabels: { a: 'Off-scale', b: 'Apply token' },
