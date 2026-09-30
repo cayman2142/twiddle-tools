@@ -358,11 +358,8 @@
   background: #fafafa;
 }
 
+/* The icon is inline with the text, so it stays on the first line wherever the text wraps. */
 .playground-note {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--tw-space-2);
   max-width: 48ch;
   margin: var(--tw-space-4) auto 0;
   color: var(--tw-fg-secondary);
@@ -372,5 +369,7 @@
 }
 
 .playground-note svg {
-  flex: none;
+  display: inline-block;
+  margin-inline-end: var(--tw-space-2);
+  vertical-align: -3px;
 }
