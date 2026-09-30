@@ -26,6 +26,16 @@ test('a missing engine falls back to the video on desktop', async ({ page }) => 
   await expect(page.locator('video.playground-video')).toBeVisible({ timeout: 20_000 });
 });
 
+test('an iframe that is not the Forge page falls back to the video at once', async ({ page }) => {
+  // What an SPA fallback does with a missing forge.html: some other page, no engine.
+  await page.route('**/playground/forge.html', (route) =>
+    route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>twiddle</title><p>not the forge</p>' }),
+  );
+  await page.goto('/');
+  await page.locator('.playground').scrollIntoViewIfNeeded();
+  await expect(page.locator('video.playground-video')).toBeVisible({ timeout: 3_000 });
+});
+
 test('the playground is wide at 1024px', async ({ page }) => {
   await page.setViewportSize({ width: 1024, height: 900 });
   await page.goto('/');

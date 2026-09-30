@@ -53,6 +53,29 @@ test('Reset clears the ticks and reloads a clean page', async ({ page }) => {
   expect(await fresh.locator('section.card').getAttribute('style')).toBeNull();
 });
 
+test('a startup step that throws still leaves a working playground', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (window === window.top) return;
+    const query = Document.prototype.querySelector;
+    Document.prototype.querySelector = function querySelector(this: Document, selector: string) {
+      if (selector === 'section.card') throw new Error('pin failed');
+      return query.call(this, selector);
+    } as typeof query;
+  });
+  const frame = await playgroundReady(page);
+  expect(await frame.evaluate(() => (window as unknown as { Twiddle: { isOn(): boolean } }).Twiddle.isOn())).toBe(true);
+});
+
+test('after the engine closes itself, Turn it back on starts a fresh one', async ({ page }) => {
+  const frame = await playgroundReady(page);
+  await mouseClick(page, frame, '[aria-label="Close Twiddle"]');
+  await expect(page.locator('.playground__veil')).toContainText('twiddle is off.');
+  await page.getByRole('button', { name: 'Turn it back on' }).click();
+  await expect(page.locator('.playground__veil')).toHaveCount(0, { timeout: 15_000 });
+  const fresh = forge(page)!;
+  expect(await fresh.evaluate(() => (window as unknown as { Twiddle?: { isOn(): boolean } }).Twiddle?.isOn() ?? false)).toBe(true);
+});
+
 test('the page inside the iframe never renders a nested playground', async ({ page }) => {
   await page.goto('/');
   const nested = await page.evaluate(async () => {

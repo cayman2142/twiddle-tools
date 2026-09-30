@@ -69,6 +69,10 @@ function Live() {
     setDone(NONE);
     setCopy(null);
   }, []);
+  // The engine's own Close Twiddle destroys it; only a fresh iframe brings it back.
+  const turnOn = () => {
+    if (!bridge?.turnOn()) reset();
+  };
 
   return (
     <div ref={wrapRef} className="playground">
@@ -97,7 +101,7 @@ function Live() {
               {status === 'off' ? (
                 <div className="playground__veil">
                   <p>twiddle is off.</p>
-                  <button type="button" className="site-ghost" onClick={() => bridge?.turnOn()}>
+                  <button type="button" className="site-ghost" onClick={turnOn}>
                     <Power size={16} strokeWidth={2.25} aria-hidden="true" />
                     Turn it back on
                   </button>

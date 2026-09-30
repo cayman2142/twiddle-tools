@@ -30,6 +30,43 @@ test('the toolbar block copy says it copied the block', async ({ page }) => {
   await expect(page.locator('.playground-finish').getByRole('heading')).toHaveText('You copied the whole block as a brief');
 });
 
+test('cutting the element is not a copy', async ({ page }) => {
+  const frame = await playgroundReady(page);
+  // The toolbar keeps focus where it was; with the page unfocused the write is refused and proves nothing.
+  await frame.evaluate(() => window.focus());
+  await mouseClick(page, frame, '[aria-label="Cut element"]');
+  await expect(frame.locator('section.card')).toHaveCount(0);
+  await page.waitForTimeout(1000);
+  await expect(page.locator('.playground-finish')).toHaveCount(0);
+  await expect(task(page, 'copy')).not.toHaveAttribute('data-done', 'true');
+});
+
+test('Ctrl+X on the pinned element is not a copy', async ({ page }) => {
+  const frame = await playgroundReady(page);
+  await frame.evaluate(() => window.focus());
+  await page.keyboard.press('Control+X');
+  await expect(frame.locator('section.card')).toHaveCount(0);
+  await page.waitForTimeout(1000);
+  await expect(page.locator('.playground-finish')).toHaveCount(0);
+  await expect(task(page, 'copy')).not.toHaveAttribute('data-done', 'true');
+});
+
+test('a copy the browser refuses outright opens no card', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (window === window.top) return;
+    Clipboard.prototype.writeText = () => Promise.reject(new DOMException('Document is not focused.', 'NotAllowedError'));
+    const exec = Document.prototype.execCommand;
+    Document.prototype.execCommand = function execCommand(this: Document, id: string, ui?: boolean, value?: string) {
+      return id.toLowerCase() === 'copy' ? false : exec.call(this, id, ui, value);
+    };
+  });
+  const frame = await playgroundReady(page);
+  await mouseClick(page, frame, '.sl-toolbar__copy-block');
+  await page.waitForTimeout(1000);
+  await expect(page.locator('.playground-finish')).toHaveCount(0);
+  await expect(task(page, 'copy')).not.toHaveAttribute('data-done', 'true');
+});
+
 test('Keep playing closes the card; the next copy reopens it', async ({ page }) => {
   const frame = await playgroundReady(page);
   await mouseClick(page, frame, '.sl-toolbar__copy-block');

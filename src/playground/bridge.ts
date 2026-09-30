@@ -1,5 +1,5 @@
 import { classifyMutation, type ChangeKind } from './classify';
-import { copyKindOf, type CopyKind } from './copyKind';
+import { copyKindOf, isCutControl, isCutShortcut, type CopyKind } from './copyKind';
 import type { Box } from './placement';
 
 /* The only code that reaches into the playground iframe. The iframe is same
@@ -21,7 +21,8 @@ export type Bridge = {
   /** The first on-screen match inside the iframe, in iframe-viewport coordinates. */
   rectOf(selector: string): Box | null;
   viewport(): { width: number; height: number };
-  turnOn(): void;
+  /** False when the engine is gone (its own Close Twiddle destroys it): only a fresh iframe brings it back. */
+  turnOn(): boolean;
   dispose(): void;
 };
 
@@ -42,6 +43,39 @@ const DUPLICATE_MS = 800;
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
 
+/* forge.html carries this meta. Checked by content, not path: Cloudflare
+ * redirects /playground/forge.html to /playground/forge, and an SPA fallback
+ * would serve the landing under any path. */
+const FORGE_META = 'meta[name="twiddle-playground"][content="forge"]';
+
+/** 'forge', or 'blank' for the iframe's initial document, or 'other' for any other page. */
+function pageIn(w: Window): 'forge' | 'blank' | 'other' {
+  try {
+    if (w.document.querySelector(FORGE_META)) return 'forge';
+    return w.location.href === 'about:blank' ? 'blank' : 'other';
+  } catch {
+    return 'other'; // navigated cross-origin
+  }
+}
+
+/** Engine errors stay inside the iframe: a throwing isOn() reads as off. */
+function isOn(api: TwiddleApi): boolean {
+  try {
+    return api.isOn();
+  } catch {
+    return false;
+  }
+}
+
+/** A startup step that fails leaves the playground usable, just less prepared. */
+async function quietly(step: () => unknown) {
+  try {
+    await step();
+  } catch {
+    /* not in Edit mode, or nothing pinned: the visitor starts from Inspect */
+  }
+}
+
 function selectedText(doc: Document): string {
   const el = doc.activeElement as HTMLTextAreaElement | null;
   if (el && typeof el.value === 'string' && typeof el.selectionStart === 'number') {
@@ -52,11 +86,14 @@ function selectedText(doc: Document): string {
 
 export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): Bridge {
   let disposed = false;
+  let failed = false;
   let win: ForgeWindow | null = null;
   const cleanups: (() => void)[] = [];
 
   const fail = (reason: 'no-load' | 'no-engine') => {
-    if (!disposed) events.onFail(reason);
+    if (disposed || failed) return;
+    failed = true;
+    events.onFail(reason);
   };
 
   const loadTimer = window.setTimeout(() => {
@@ -150,19 +187,30 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
     // button just reads as `block`, the safe default.
     let control: Element | null = null;
     let controlAt = 0;
+    let cutKey = false;
     const noteControl = (event: Event) => {
       if (!(event.target instanceof w.Element)) return;
       const btn = event.target.closest(CONTROL_SEL);
       if (btn) {
         control = btn;
         controlAt = Date.now();
+        cutKey = false;
       }
+    };
+    // On the window, capture: it runs before the engine's own document listener stops the event.
+    const noteKey = (event: KeyboardEvent) => {
+      if (!isCutShortcut(event)) return;
+      control = null;
+      controlAt = Date.now();
+      cutKey = true;
     };
     doc.addEventListener('pointerdown', noteControl, true);
     doc.addEventListener('click', noteControl, true);
+    w.addEventListener('keydown', noteKey, true);
     cleanups.push(() => {
       doc.removeEventListener('pointerdown', noteControl, true);
       doc.removeEventListener('click', noteControl, true);
+      w.removeEventListener('keydown', noteKey, true);
     });
 
     let lastText = '';
@@ -172,9 +220,11 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
       const now = Date.now();
       // The engine falls back from writeText to execCommand; one copy, one event.
       if (text === lastText && now - lastAt < DUPLICATE_MS) return;
+      const recent = now - controlAt < CONTROL_TTL_MS;
+      if (recent && (cutKey || isCutControl(control))) return;
       lastText = text;
       lastAt = now;
-      events.onCopy({ kind: copyKindOf(now - controlAt < CONTROL_TTL_MS ? control : null), text });
+      events.onCopy({ kind: copyKindOf(recent ? control : null), text });
     };
 
     const clip = w.navigator.clipboard;
@@ -197,8 +247,11 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
 
     const originalExec = doc.execCommand;
     doc.execCommand = function execCommand(commandId: string, showUI?: boolean, value?: string) {
-      if (commandId.toLowerCase() === 'copy') report(selectedText(doc));
-      return originalExec.call(doc, commandId, showUI, value);
+      const copying = commandId.toLowerCase() === 'copy';
+      const text = copying ? selectedText(doc) : '';
+      const ok = originalExec.call(doc, commandId, showUI, value);
+      if (copying && ok) report(text);
+      return ok;
     };
     cleanups.push(() => {
       Reflect.deleteProperty(doc, 'execCommand');
@@ -208,7 +261,7 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
   function watchPower(api: TwiddleApi) {
     let on = true;
     const id = window.setInterval(() => {
-      const now = api.isOn();
+      const now = isOn(api);
       if (now !== on) {
         on = now;
         events.onPower(now);
@@ -218,9 +271,9 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
   }
 
   async function start(w: ForgeWindow, api: TwiddleApi) {
-    instrument(w);
-    await enterEdit(w.document);
-    await pinCard(w);
+    await quietly(() => instrument(w));
+    await quietly(() => enterEdit(w.document));
+    await quietly(() => pinCard(w));
     if (disposed) return;
     events.onReady();
     watchPower(api);
@@ -229,12 +282,17 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
   function onLoad() {
     const w = frame.contentWindow as ForgeWindow | null;
     if (!w || disposed || win) return;
+    const page = pageIn(w);
+    if (page !== 'forge') {
+      if (page === 'other') fail('no-load');
+      return;
+    }
     win = w;
     const started = Date.now();
     const poll = window.setInterval(() => {
       if (disposed) return;
       const api = w.Twiddle;
-      if (api && api.isOn()) {
+      if (api && isOn(api)) {
         window.clearInterval(poll);
         void start(w, api);
       } else if (Date.now() - started > ENGINE_TIMEOUT_MS) {
@@ -247,7 +305,7 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
 
   frame.addEventListener('load', onLoad);
   cleanups.push(() => frame.removeEventListener('load', onLoad));
-  if (frame.contentDocument?.readyState === 'complete' && frame.contentWindow?.location.pathname.endsWith('/forge.html')) {
+  if (frame.contentDocument?.readyState === 'complete' && frame.contentWindow && pageIn(frame.contentWindow) === 'forge') {
     onLoad();
   }
 
@@ -272,9 +330,15 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
     viewport,
     turnOn() {
       const api = win?.Twiddle;
-      if (!win || !api) return;
-      api.on();
-      void enterEdit(win.document);
+      if (!win || !api) return false;
+      try {
+        api.on();
+      } catch {
+        return false;
+      }
+      const doc = win.document;
+      void quietly(() => enterEdit(doc));
+      return true;
     },
     dispose() {
       disposed = true;

@@ -26,6 +26,11 @@ test('forge.html boots the vendored engine with no third-party requests', async 
   expect(errors).toEqual([]);
 });
 
+test('forge.html names itself, so the site can tell it from a fallback page', async ({ page }) => {
+  await page.goto('/playground/forge.html');
+  await expect(page.locator('meta[name="twiddle-playground"]')).toHaveAttribute('content', 'forge');
+});
+
 test('icons are inline SVG, not a CDN script', async ({ page }) => {
   await page.goto('/playground/forge.html');
   await expect(page.locator('i[data-lucide]')).toHaveCount(0);

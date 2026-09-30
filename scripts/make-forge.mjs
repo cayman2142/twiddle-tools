@@ -33,7 +33,7 @@ edit('google stylesheet', /\n\s*<link href="https:\/\/fonts\.googleapis\.com[^>]
 edit(
   'viewport meta',
   '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
-  '<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <meta name="robots" content="noindex" />',
+  '<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <meta name="robots" content="noindex" />\n    <meta name="twiddle-playground" content="forge" />',
 );
 edit(
   'first style tag',
