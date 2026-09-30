@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Check, Copy } from 'lucide-react';
 import { ChangesPanel } from '../chrome/Panel';
+import { HighlightedPayload } from './HighlightedPayload';
 import { Thiing } from './Thiing';
 
 const ROWS = [
@@ -27,28 +28,6 @@ Agent — how to apply:
    dom_path: main > section.hero > button.cta  (runtime only — not a source selector)
    padding: 11px 22px → var(--space-4) var(--space-6)
    background-color: #0f766e → var(--color-brand)`;
-
-function Highlighted() {
-  return (
-    <>
-      {PAYLOAD.split('\n').map((line, index) => {
-        const arrow = line.indexOf(' → ');
-        const isChange = /^ {3}[a-z-]+: /.test(line) && arrow > 0 && !line.includes('dom_path');
-        if (!isChange) return <span key={index}>{line + '\n'}</span>;
-        const colon = line.indexOf(': ');
-        return (
-          <span key={index} className="handoff__change">
-            {line.slice(0, colon + 2)}
-            <span className="handoff__was">{line.slice(colon + 2, arrow)}</span>
-            {' → '}
-            <span className="handoff__want">{line.slice(arrow + 3)}</span>
-            {'\n'}
-          </span>
-        );
-      })}
-    </>
-  );
-}
 
 export function Handoff() {
   const [copied, setCopied] = useState(false);
@@ -95,7 +74,7 @@ export function Handoff() {
               </button>
             </figcaption>
             <pre>
-              <Highlighted />
+              <HighlightedPayload text={PAYLOAD} />
             </pre>
           </figure>
         </div>

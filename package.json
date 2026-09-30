@@ -14,6 +14,7 @@
     "make:forge": "node scripts/make-forge.mjs",
     "predev": "node scripts/vendor-engine.mjs",
     "prebuild": "node scripts/vendor-engine.mjs",
+    "test": "vitest run",
     "test:e2e": "playwright test",
     "record:playground": "node scripts/record-playground.mjs"
   },
@@ -34,9 +35,11 @@
     "@types/react-dom": "^19.2.7",
     "@types/three": "^0.186.0",
     "@vitejs/plugin-react": "^6.1.1",
+    "happy-dom": "^20.14.5",
     "oxlint": "^1.81.0",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
+    "vitest": "^5.0.3",
     "wrangler": "^4.135.0"
   }
 }
