@@ -48,10 +48,10 @@ export function HowItWorks() {
                 data-step={index + 1}
                 data-active={on || undefined}
                 tabIndex={0}
-                onMouseEnter={() => enter(index)}
-                onMouseLeave={() => leave(index)}
-                onFocus={() => enter(index)}
-                onBlur={() => leave(index)}
+                onMouseEnter={() => enter(index, 'hover')}
+                onMouseLeave={() => leave(index, 'hover')}
+                onFocus={() => enter(index, 'focus')}
+                onBlur={() => leave(index, 'focus')}
               >
                 <StepScene step={index + 1} playing={on} playKey={on ? play : 'rest'} />
                 <div className="site-steps__text">

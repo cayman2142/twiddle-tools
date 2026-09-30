@@ -71,10 +71,30 @@ test('hovering a step makes it the only one playing, and it keeps playing while 
   expect(await animatingSteps(page)).toEqual(['3']);
 });
 
+test('after the mouse leaves a step, the sequence moves on to the next one', async ({ page }) => {
+  await showSteps(page);
+  await step(page, 2).hover();
+  await expect.poll(() => activeSteps(page)).toEqual(['2']);
+  await page.mouse.move(5, 5);
+  await expect.poll(() => activeSteps(page), { timeout: 6000 }).toEqual(['3']);
+});
+
 test('focusing a step with the keyboard makes it the one playing', async ({ page }) => {
   await showSteps(page);
   await step(page, 4).focus();
   await expect.poll(() => activeSteps(page)).toEqual(['4']);
+});
+
+test('the mouse passing over another step does not end a keyboard hold', async ({ page }) => {
+  await showSteps(page);
+  await step(page, 4).focus();
+  await expect.poll(() => activeSteps(page)).toEqual(['4']);
+  await step(page, 2).hover();
+  await expect.poll(() => activeSteps(page)).toEqual(['2']);
+  await page.mouse.move(5, 5);
+  await expect.poll(() => activeSteps(page)).toEqual(['4']);
+  await page.waitForTimeout(5500);
+  expect(await activeSteps(page)).toEqual(['4']);
 });
 
 test.describe('stacked steps', () => {
@@ -108,4 +128,7 @@ test('with reduced motion, every scene shows its result and nothing animates or 
     await page.waitForTimeout(500);
   }
   expect([...seen]).toEqual(['[]']);
+  const copied = page.locator('.step-scene[data-scene="4"] .step-scene__copy > b').last();
+  await expect(copied).toHaveText('Copied');
+  expect(await copied.evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
 });

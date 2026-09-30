@@ -25,9 +25,11 @@ export type StepPlayback = {
   active: number;
   /** Bumps every time the active scene must start over; key the scene on it. */
   play: number;
-  enter: (index: number) => void;
-  leave: (index: number) => void;
+  enter: (index: number, via: Hold) => void;
+  leave: (index: number, via: Hold) => void;
 };
+
+type Hold = 'hover' | 'focus';
 
 /**
  * One step plays at a time. In a row, the steps take turns and hover or focus
@@ -42,7 +44,8 @@ export function useStepPlayback(listRef: RefObject<HTMLElement | null>, duration
   const [index, setIndex] = useState(0);
   const [play, setPlay] = useState(0);
   const indexRef = useRef(0);
-  const held = useRef<number | null>(null);
+  const hovered = useRef<number | null>(null);
+  const focused = useRef<number | null>(null);
   const running = visible && !reduced;
 
   const choose = useCallback((next: number) => {
@@ -55,22 +58,32 @@ export function useStepPlayback(listRef: RefObject<HTMLElement | null>, duration
   useEffect(() => {
     const list = listRef.current;
     if (!list) return;
+    /* Per step, not the whole list: stacked, the list is ~2.5 viewports tall and
+     * never reaches 30% visible even with a step centred. */
+    const shown = new Set<Element>();
     let seen = false;
-    const observer = new IntersectionObserver((entries) => {
-      const next = entries.some((entry) => entry.isIntersecting);
-      if (next === seen) return;
-      seen = next;
-      setVisible(next);
-      if (next) setPlay((p) => p + 1);
-    });
-    observer.observe(list);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) shown.add(entry.target);
+          else shown.delete(entry.target);
+        }
+        const next = shown.size > 0;
+        if (next === seen) return;
+        seen = next;
+        setVisible(next);
+        if (next) setPlay((p) => p + 1);
+      },
+      { threshold: 0.3 },
+    );
+    for (const child of list.children) observer.observe(child);
     return () => observer.disconnect();
   }, [listRef]);
 
   useEffect(() => {
     if (!running) return;
     const id = window.setTimeout(() => {
-      if (stacked || held.current !== null) setPlay((p) => p + 1);
+      if (stacked || (hovered.current ?? focused.current) !== null) setPlay((p) => p + 1);
       else choose((indexRef.current + 1) % durations.length);
     }, durations[index]);
     return () => window.clearTimeout(id);
@@ -108,18 +121,26 @@ export function useStepPlayback(listRef: RefObject<HTMLElement | null>, duration
     };
   }, [running, stacked, listRef, choose]);
 
+  /* Hover wins over focus; leaving with the mouse hands the hold back to a focused step. */
   const enter = useCallback(
-    (i: number) => {
+    (i: number, via: Hold) => {
       if (stacked) return;
-      held.current = i;
-      choose(i);
+      (via === 'hover' ? hovered : focused).current = i;
+      choose(hovered.current ?? i);
     },
     [stacked, choose],
   );
 
-  const leave = useCallback((i: number) => {
-    if (held.current === i) held.current = null;
-  }, []);
+  const leave = useCallback(
+    (i: number, via: Hold) => {
+      const ref = via === 'hover' ? hovered : focused;
+      if (ref.current !== i) return;
+      ref.current = null;
+      const still = hovered.current ?? focused.current;
+      if (still !== null && !stacked) choose(still);
+    },
+    [stacked, choose],
+  );
 
   return { active: running ? index : -1, play, enter, leave };
 }

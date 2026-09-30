@@ -5,7 +5,7 @@
  * scene's LAST frame; the keyframes start from the first. Animations sit paused
  * at 0% until the scene has [data-playing], and with reduced motion they finish
  * at once, which leaves every scene on its result. Keyframe percentages are
- * written against SCENE_MS in StepScene.tsx. */
+ * written against SCENE_MS in timing.ts. */
 
 .step-scene {
   position: relative;
