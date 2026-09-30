@@ -9,7 +9,13 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "deploy": "npm run build && wrangler deploy",
-    "vendor:chrome": "node scripts/vendor-chrome.mjs"
+    "vendor:chrome": "node scripts/vendor-chrome.mjs",
+    "vendor:engine": "node scripts/vendor-engine.mjs",
+    "make:forge": "node scripts/make-forge.mjs",
+    "predev": "node scripts/vendor-engine.mjs",
+    "prebuild": "node scripts/vendor-engine.mjs",
+    "test:e2e": "playwright test",
+    "record:playground": "node scripts/record-playground.mjs"
   },
   "dependencies": {
     "@fontsource-variable/onest": "^5.3.1",
@@ -21,6 +27,8 @@
     "three": "^0.186.0"
   },
   "devDependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@playwright/test": "^1.62.0",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",

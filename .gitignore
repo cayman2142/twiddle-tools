@@ -23,3 +23,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# The shipped twiddle engine, copied from ../twiddle by npm run vendor:engine.
+# Never commit it: this repo is public and the product is closed source.
+public/playground/engine/
+test-results/
+playwright-report/
