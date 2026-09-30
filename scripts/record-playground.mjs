@@ -70,6 +70,14 @@ const BG_HEX = '.sl-panel input.sl-ed__hex[data-sl-edit="background-color"]';
 await clickCenter('[aria-label="Edit mode"]');
 await clickEdge('section.card');
 await page.waitForTimeout(700);
+/* The card's radius is bound to --radius-xl; detaching the token turns the chip into a number field. */
+await clickCenter('.sl-panel .sl-ed__tok-detach[data-sl-var-prop="border-radius"]');
+await page.waitForTimeout(500);
+await clickCenter('.sl-panel input.sl-ed__num[data-sl-edit="border-radius"]');
+await page.keyboard.press('Control+A');
+await page.keyboard.type('28', { delay: 140 });
+await page.keyboard.press('Enter');
+await page.waitForTimeout(900);
 await typeHex(BG_HEX, 'EEF2FF');
 await page.waitForTimeout(700);
 await clickCenter('#auth-title');
@@ -93,6 +101,8 @@ await page.waitForTimeout(500);
 await clickCenter('.sl-panel__tab[data-sl-tab="changes"]');
 await page.waitForTimeout(900);
 await clickCenter('.sl-panel [data-sl-changes="copy"]');
+/* Step off the icon so its brief checkmark is not hidden under the cursor. */
+await page.mouse.move(820, 260, { steps: 6 });
 await page.waitForTimeout(1600);
 const posterPng = join(tmp, 'poster.png');
 await page.screenshot({ path: posterPng });
