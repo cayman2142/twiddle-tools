@@ -4,9 +4,6 @@ type Props = {
   size?: number;
 };
 
-export type BoxRect = { top: number; left: number; width: number; height: number };
-export type SideNums = [number, number, number, number];
-
 type HatchKind = 'pad' | 'mar';
 type HatchDir = 'back' | 'fwd';
 
@@ -56,39 +53,6 @@ function hatchFill(kind: HatchKind): CSSProperties {
   return style;
 }
 
-function Band({
-  kind,
-  size,
-  left,
-  top,
-  width,
-  height,
-}: {
-  kind: HatchKind;
-  size: number;
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-}) {
-  if (width < 0.5 || height < 0.5 || size < 0.5) return null;
-  return (
-    <div
-      className={`twc-hatch__band twc-hatch__band--${kind}`}
-      style={{
-        left,
-        top,
-        width,
-        height,
-        ...hatchFill(kind),
-        backgroundPosition: `${-left}px ${-top}px`,
-      }}
-    >
-      {width >= 12 || height >= 12 ? <span className="twc-hatch__badge">{size}</span> : null}
-    </div>
-  );
-}
-
 /** Static padding hatch for the Relay scenes: four bands of `size` px. */
 export function Hatch({ size = 16 }: Props) {
   const fill = hatchFill('pad');
@@ -109,46 +73,6 @@ export function Hatch({ size = 16 }: Props) {
         <span className="twc-hatch__badge">{label}</span>
       </div>
     </div>
-  );
-}
-
-export function LiveHatch({ box, padding, margin }: { box: BoxRect; padding: SideNums; margin: SideNums }) {
-  const [pt, pr, pb, pl] = padding;
-  const [mt, mr, mb, ml] = margin;
-  const hasPad = pt + pr + pb + pl > 0;
-  const hasMar = mt + mr + mb + ml > 0;
-  const padStyle = {
-    ['--live-t' as string]: `${box.top}px`,
-    ['--live-l' as string]: `${box.left}px`,
-    ['--live-w' as string]: `${box.width}px`,
-    ['--live-h' as string]: `${box.height}px`,
-  };
-  const marStyle = {
-    ['--live-t' as string]: `${box.top - mt}px`,
-    ['--live-l' as string]: `${box.left - ml}px`,
-    ['--live-w' as string]: `${box.width + ml + mr}px`,
-    ['--live-h' as string]: `${box.height + mt + mb}px`,
-  };
-  const padMidH = Math.max(0, box.height - pt - pb);
-  return (
-    <>
-      {hasPad ? (
-        <div className="twc-hatch is-visible twc-hatch--live" style={padStyle} aria-hidden="true">
-          <Band kind="pad" size={pt} left={0} top={0} width={box.width} height={pt} />
-          <Band kind="pad" size={pr} left={box.width - pr} top={pt} width={pr} height={padMidH} />
-          <Band kind="pad" size={pb} left={0} top={box.height - pb} width={box.width} height={pb} />
-          <Band kind="pad" size={pl} left={0} top={pt} width={pl} height={padMidH} />
-        </div>
-      ) : null}
-      {hasMar ? (
-        <div className="twc-hatch is-visible twc-hatch--live" style={marStyle} aria-hidden="true">
-          <Band kind="mar" size={mt} left={ml} top={0} width={box.width} height={mt} />
-          <Band kind="mar" size={mr} left={ml + box.width} top={mt} width={mr} height={box.height} />
-          <Band kind="mar" size={mb} left={ml} top={mt + box.height} width={box.width} height={mb} />
-          <Band kind="mar" size={ml} left={0} top={mt} width={ml} height={box.height} />
-        </div>
-      ) : null}
-    </>
   );
 }
 

@@ -355,10 +355,6 @@
   margin: 0 auto;
 }
 
-.scene-stage--hero {
-  --stage-h: 640px;
-}
-
 .site-band {
   scroll-margin-top: var(--tw-space-12);
 }

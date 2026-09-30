@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Changes, type ChangeRow } from './Changes';
-import { ColorField, SidesEditor, SizeRow, TokenChip, type SideTuple } from './Editors';
+import { ColorField, SidesEditor, SizeRow, TokenChip } from './Editors';
 import { Icon, TabIcon } from './icons';
 
 type Tab = 'spec' | 'colors' | 'type' | 'assets' | 'changes';
@@ -161,75 +161,6 @@ export function EditPanel({
               <span className="twc-row__key">color</span>
               <span className="twc-row__val">
                 <ColorField hex="0F766E" swatch="#0f766e" />
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Panel>
-  );
-}
-
-export function BoxEditPanel({
-  tag,
-  padding,
-  margin,
-  radius,
-  onPadding,
-  onMargin,
-  onRadius,
-}: {
-  tag: string;
-  padding: SideTuple;
-  margin: SideTuple;
-  radius: SideTuple;
-  onPadding: (values: SideTuple) => void;
-  onMargin: (values: SideTuple) => void;
-  onRadius: (values: SideTuple) => void;
-}) {
-  return (
-    <Panel tab="spec">
-      <div className="twc-panel__card twc-panel__card--meta">
-        <div className="twc-panel__head">
-          <div className="twc-panel__head-row">
-            <span className="twc-panel__tag">{tag}</span>
-            <button type="button" className="twc-panel__pin" aria-pressed="true" tabIndex={-1}>
-              <span className="twc-panel__pin-text">Pinned</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="twc-section">
-        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="twc-section__label">Spacing</span>
-        </button>
-        <div className="twc-section__body">
-          <div className="twc-section__inner">
-            <div className="twc-row">
-              <span className="twc-row__key">padding</span>
-              <span className="twc-row__val">
-                <SidesEditor values={padding} onChange={onPadding} />
-              </span>
-            </div>
-            <div className="twc-row">
-              <span className="twc-row__key">margin</span>
-              <span className="twc-row__val">
-                <SidesEditor values={margin} onChange={onMargin} />
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="twc-section">
-        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="twc-section__label">Corner</span>
-        </button>
-        <div className="twc-section__body">
-          <div className="twc-section__inner">
-            <div className="twc-row">
-              <span className="twc-row__key">radius</span>
-              <span className="twc-row__val">
-                <SidesEditor values={radius} onChange={onRadius} kind="radius" />
               </span>
             </div>
           </div>

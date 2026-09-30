@@ -240,8 +240,7 @@
 .scene-stage .twc-hatch-preview,
 .scene-stage .twc-hatch__band,
 .scene-stage .twc-size-cap,
-.scene-stage .twc-outline,
-.scene-stage .twc-hover-outline {
+.scene-stage .twc-outline {
   position: absolute !important;
 }
 
@@ -251,27 +250,6 @@
   box-shadow: none;
   border-radius: inherit;
   z-index: 2;
-}
-
-.scene-stage .twc-outline.is-live,
-.scene-stage .twc-hover-outline.is-live,
-.scene-stage .twc-hatch.twc-hatch--live {
-  top: var(--live-t) !important;
-  left: var(--live-l) !important;
-  width: var(--live-w) !important;
-  height: var(--live-h) !important;
-  right: auto !important;
-  bottom: auto !important;
-  z-index: 5;
-}
-
-.scene-stage .twc-outline.is-live,
-.scene-stage .twc-hover-outline.is-live {
-  border-radius: var(--live-r, 0);
-}
-
-.scene-stage .twc-hover-outline.is-live {
-  display: block;
 }
 
 .scene-stage .twc-hatch,
