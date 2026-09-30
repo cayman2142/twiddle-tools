@@ -1,0 +1,160 @@
+/* Hero playground. Site tokens only: nothing here may style the engine, which
+ * lives in its own document inside the iframe. */
+
+.playground {
+  width: 100%;
+}
+
+/* Doubled class: this file loads before scene-stage.css, whose .scene-stage sets 620px. */
+.scene-stage.scene-stage--playground {
+  --stage-h: 776px;
+}
+
+.playground__view {
+  position: absolute;
+  inset: 0;
+}
+
+.playground__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.playground__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tw-space-3);
+  background: color-mix(in srgb, var(--tw-surface) 82%, transparent);
+  color: var(--tw-fg-secondary);
+  font-size: var(--tw-text-sm);
+}
+
+.playground__veil p {
+  margin: 0;
+}
+
+.playground__spinner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--tw-border);
+  border-top-color: var(--tw-accent-solid);
+  animation: playground-spin 800ms linear infinite;
+}
+
+@keyframes playground-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---- Checklist ---- */
+
+.playground-tasks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tw-space-3) var(--tw-space-4);
+  margin: var(--tw-space-4) auto 0;
+}
+
+.playground-tasks__lead {
+  margin: 0;
+  color: var(--tw-fg-secondary);
+  font-size: var(--tw-text-sm);
+}
+
+.playground-tasks__lead strong {
+  color: var(--tw-fg);
+}
+
+.playground-tasks__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--tw-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.playground-task {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tw-space-2);
+  padding: 6px var(--tw-space-3) 6px 8px;
+  border-radius: var(--twc-r-full);
+  background: var(--tw-surface);
+  box-shadow: inset 0 0 0 1px var(--tw-border);
+  color: var(--tw-fg-secondary);
+  font-size: 13px;
+  transition: color 200ms ease;
+}
+
+.playground-task__box {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--tw-border);
+  color: #fff;
+  transition: background-color 200ms ease;
+}
+
+.playground-task[data-done] {
+  color: var(--tw-fg);
+}
+
+.playground-task[data-done] .playground-task__box {
+  background: #30a46c;
+  box-shadow: none;
+}
+
+.playground-task[data-task='copy'] {
+  font-weight: 600;
+}
+
+.playground-tasks__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px var(--tw-space-3);
+  border: 0;
+  border-radius: var(--twc-r-full);
+  background: transparent;
+  color: var(--tw-fg-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.playground-tasks__reset:hover {
+  background: var(--tw-surface);
+  color: var(--tw-fg);
+}
+
+.playground-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playground__spinner {
+    animation-duration: 2400ms;
+  }
+}

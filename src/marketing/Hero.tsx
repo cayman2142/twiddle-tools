@@ -1,7 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { MousePointerClick } from 'lucide-react';
-import { StageFrame } from '../app/StageFrame';
-import { HeroDemo } from '../host/HeroDemo';
+import { Playground } from '../playground/Playground';
 import { CtaButton } from './CtaButton';
 
 const PixelBlast = lazy(() => import('./PixelBlast'));
@@ -37,18 +35,7 @@ export function Hero() {
         </p>
       </div>
       <div className="site-hero__stage">
-        <StageFrame
-          url="relay.app/welcome"
-          className="scene-stage--hero"
-          hint={
-            <>
-              <MousePointerClick size={14} strokeWidth={2.25} aria-hidden="true" />
-              Try it: click a box, then change the numbers
-            </>
-          }
-        >
-          <HeroDemo />
-        </StageFrame>
+        <Playground />
       </div>
     </section>
   );
