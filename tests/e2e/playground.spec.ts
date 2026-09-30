@@ -80,6 +80,8 @@ test('the page inside the iframe never renders a nested playground', async ({ pa
   await page.goto('/');
   const nested = await page.evaluate(async () => {
     const probe = document.createElement('iframe');
+    // Wide, tall and on screen (the near-viewport check is against the top window), so only the embedded guard keeps the playground out.
+    probe.style.cssText = 'position: fixed; inset: 0 auto auto 0; width: 1200px; height: 900px; z-index: 9999;';
     probe.src = '/';
     document.body.appendChild(probe);
     await new Promise((r) => probe.addEventListener('load', r, { once: true }));

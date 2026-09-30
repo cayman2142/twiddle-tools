@@ -9,6 +9,7 @@ for (const width of [768, 390]) {
     });
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
+    await page.locator('.playground').scrollIntoViewIfNeeded();
     await expect(page.locator('video.playground-video')).toBeVisible();
     await expect(page.locator('iframe.playground__frame')).toHaveCount(0);
     await expect(page.locator('.playground-note')).toContainText('computer');
