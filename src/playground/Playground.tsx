@@ -4,6 +4,7 @@ import { StageFrame } from '../app/StageFrame';
 import { connectBridge, type Bridge, type CopyResult } from './bridge';
 import { Checklist } from './Checklist';
 import { Coach } from './Coach';
+import { FinishCard } from './FinishCard';
 import { useNearViewport, useWideEnough } from './hooks';
 import { NONE, type Done } from './tasks';
 import './playground.css';
@@ -87,6 +88,7 @@ function Live() {
             </div>
           ) : null}
           {status === 'ready' && bridge && !copy && tips ? <Coach bridge={bridge} done={done} onClose={() => setTips(false)} /> : null}
+          {copy ? <FinishCard copy={copy} onClose={() => setCopy(null)} /> : null}
         </div>
       </StageFrame>
       <Checklist done={done} onReset={reset} />

@@ -181,8 +181,14 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
     if (clip && typeof clip.writeText === 'function') {
       const original = clip.writeText;
       clip.writeText = function writeText(text: string) {
-        report(String(text));
-        return original.call(clip, text);
+        // Report only once the write settles: a rejection sends the engine to its execCommand
+        // fallback, which focuses a textarea in the iframe and would steal focus from the finish card.
+        const pending = original.call(clip, text);
+        pending.then(
+          () => report(String(text)),
+          () => {},
+        );
+        return pending;
       };
       cleanups.push(() => {
         Reflect.deleteProperty(clip, 'writeText');
