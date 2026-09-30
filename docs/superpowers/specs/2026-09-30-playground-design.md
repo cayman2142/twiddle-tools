@@ -69,8 +69,8 @@ The page works on its own when opened directly, which is how it is debugged.
   - wraps the iframe window's `navigator.clipboard.writeText`,
     `navigator.clipboard.write`, and `document.execCommand('copy')`, calling
     through to the originals, and emits `copied { kind, text }`, where `kind`
-    is `agent-md`, `format`, or `element` depending on the toolbar button that
-    started it;
+    is `changes` or `block` depending on the control that started it (see How
+    detection works);
   - resolves anchor rects for the coach (`rectOf(target)`), returning `null`
     when an element is missing.
 - `Coach.tsx` — the floating hint (below).
@@ -104,14 +104,30 @@ Established by reading `src/core/legacy.js` in the product repo:
   mutations inside Forge content → `text`.
 - Copy actions: all clipboard writes in the engine go through
   `navigator.clipboard.writeText`, `navigator.clipboard.write`, or
-  `document.execCommand('copy')`. `kind` comes from the `aria-label` of the
-  last toolbar button clicked before the write (`Copy as Agent MD`,
-  `Copy as format` menu items, `Copy element`). Screenshot writes an image and
-  is not a finish.
+  `document.execCommand('copy')`. `kind` comes from the last chrome control
+  clicked before the write:
+  - `changes` — **Copy changes** is the `Copy all changes` button
+    (`[data-sl-changes="copy"]`) in the panel's **Changes** tab
+    (`.sl-panel__tab[data-sl-tab="changes"]`), or any copy inside `.sl-changes`.
+    This is the product's main output and the playground's finish line.
+  - `block` — the toolbar's `Copy as Agent MD` / `Copy as HTML` button
+    (`.sl-toolbar__copy-block`), its format menu (`.sl-toolbar__copy-menu`),
+    and `Copy element` (also Ctrl+C with no click). These copy the pinned
+    element and its children, not the edits.
+  - No recent chrome click (keyboard copy) → `block`.
+  Screenshot writes an image (`navigator.clipboard.write`) and is ignored.
+- Correction to the brainstorm: the toolbar's `Copy as Agent MD` is the block
+  copy, not Copy changes. Copy changes lives in the Changes tab.
 
 ## Behaviour
 
 ### Start state
+
+Before the engine script loads, `forge.html` merges `{"onboardingDone": true}`
+into `localStorage['twiddle-prefs']`, so the engine's own first-run tour does
+not start on top of the coach. (Playwright sets `navigator.webdriver`, which
+also suppresses the tour, so tests cannot catch a regression here; check by
+hand once in a normal browser.)
 
 On `Twiddle` ready, the bridge switches to Edit mode (clicks the toolbar's
 `Edit mode` button) and pins the card with a synthetic pointer click on its
@@ -138,8 +154,9 @@ with `rectOf`:
 1. a padding or radius field in the panel
 2. a colour swatch in the panel
 3. the card title
-4. the `Copy as Agent MD` button, with a second line: "or copy the whole
-   block: Copy element"
+4. the panel's **Changes** tab while it is not selected, then its
+   `Copy all changes` button, with a second line: "or copy the whole block as
+   a brief: the copy button in the toolbar"
 
 If the anchor is missing (the engine changed), the hint is not shown; the
 checklist carries on. The hint has a close button; once closed, only the
@@ -153,12 +170,14 @@ reads as the site talking, not the product.
 
 Shown on `copied`, bottom-right over the frame; the iframe behind it dims.
 
-- `agent-md` / `format`: "This is what your agent gets", the first ~12 lines of
-  the copied text in mono with the Handoff section's was/want highlighting,
-  then "Already in your clipboard — paste it into Claude Code, Cursor,
-  anything."
-- `element`: "You copied the whole block", with the first lines of the HTML.
-- Copied with no changes: "Nothing changed yet — tweak something, then copy."
+- `changes`: "This is what your agent gets", the first ~12 lines of the
+  copied text in mono with the Handoff section's was/want highlighting, then
+  "Already in your clipboard — paste it into Claude Code, Cursor, anything."
+- `block`: "You copied the whole block as a brief", with the first ~12 lines,
+  and the same clipboard line.
+- `changes` with no edits (the engine's button is disabled then, so this only
+  happens if it copies an empty diff): "Nothing changed yet — tweak something,
+  then copy."
 - Actions: **Add to Chrome — it's free** (`CWS_URL`, new tab) and
   **Keep playing** (closes). Another copy updates and reopens it. The card
   appears only in answer to a copy.
@@ -185,7 +204,7 @@ Playwright, as for the previous site pass:
    console errors in the iframe.
 2. A padding edit through the panel ticks 1; a colour edit ticks 2; a
    double-click and typing ticks 3.
-3. Clicking `Copy as Agent MD` opens the finish card with the text that is
+3. Opening the Changes tab and clicking `Copy all changes` opens the finish card with the text that is
    actually in the clipboard; its CTA points at the CWS listing.
 4. With the unpacked 0.1.6 plugin loaded and toggled on twiddle.tools: both run,
    the iframe gets no second copy, and neither the site nor the playground
