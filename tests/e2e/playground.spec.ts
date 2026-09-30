@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { BG_HEX, MARGIN, editText, forge, playgroundReady, task, typeInto } from './helpers';
+import { BG_HEX, MARGIN, editText, forge, mouseClick, playgroundReady, task, typeInto } from './helpers';
 
 test('boots the real engine with the card pinned and nothing ticked', async ({ page }) => {
   const frame = await playgroundReady(page);
@@ -27,6 +27,19 @@ test('a text edit ticks text', async ({ page }) => {
   await editText(page, frame, 'Hello there');
   await expect(frame.locator('#auth-title')).toHaveText('Hello there');
   await expect(task(page, 'text')).toHaveAttribute('data-done', 'true');
+});
+
+test('previewing a hover state and going back to default ticks nothing', async ({ page }) => {
+  const frame = await playgroundReady(page);
+  const button = '.oauth button';
+  await mouseClick(page, frame, button);
+  await mouseClick(page, frame, '.sl-panel .sl-state[data-state="hover"]');
+  await expect(frame.locator(button).first()).toHaveAttribute('data-sl-live-state', 'hover');
+  expect(await frame.locator(button).first().getAttribute('style')).toContain('background');
+  await mouseClick(page, frame, '.sl-panel .sl-state[data-state="default"]');
+  await expect(frame.locator(button).first()).not.toHaveAttribute('data-sl-live-state', /.*/);
+  await page.waitForTimeout(500);
+  for (const id of ['space', 'colour', 'text', 'copy']) await expect(task(page, id)).not.toHaveAttribute('data-done', 'true');
 });
 
 test('Reset clears the ticks and reloads a clean page', async ({ page }) => {

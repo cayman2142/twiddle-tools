@@ -30,8 +30,9 @@ type ForgeWindow = Window & typeof globalThis & { Twiddle?: TwiddleApi };
 
 /** The engine's own chrome (panel, toolbar, overlays) — never counted as page edits. */
 export const CHROME_SEL = '[data-sl-chrome], [data-sl-ignore]';
-/** Elements under the engine's hover/focus/disabled state preview, whose inline paint is not an edit. */
-const STATE_PREVIEW_SEL = '[data-sl-live-state]';
+/** Marks the element under the engine's hover/focus/disabled state preview, whose inline paint is not an edit. */
+const STATE_ATTR = 'data-sl-live-state';
+const STATE_PREVIEW_SEL = `[${STATE_ATTR}]`;
 const CONTROL_SEL = 'button, [role="menuitem"], [role="menuitemradio"]';
 
 const LOAD_TIMEOUT_MS = 30_000;
@@ -116,9 +117,14 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
 
     const root = doc.querySelector('.app') ?? doc.body;
     const observer = new w.MutationObserver((records) => {
+      // The engine restores paint before dropping the marker when a preview
+      // ends, so by now the marker may be gone: skip the whole batch around it.
+      const toggled = records.filter((rec) => rec.attributeName === STATE_ATTR).map((rec) => rec.target);
       for (const rec of records) {
+        if (rec.attributeName === STATE_ATTR) continue;
         const el = rec.target.nodeType === 1 ? (rec.target as Element) : rec.target.parentElement;
         if (!el || el.closest(CHROME_SEL) || el.closest(STATE_PREVIEW_SEL)) continue;
+        if (toggled.some((node) => node.contains(el))) continue;
         const kinds = classifyMutation({
           type: rec.type,
           attributeName: rec.attributeName,
@@ -132,7 +138,7 @@ export function connectBridge(frame: HTMLIFrameElement, events: BridgeEvents): B
     observer.observe(root, {
       subtree: true,
       attributes: true,
-      attributeFilter: ['style'],
+      attributeFilter: ['style', STATE_ATTR],
       attributeOldValue: true,
       characterData: true,
       childList: true,
