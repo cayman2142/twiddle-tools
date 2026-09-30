@@ -6,6 +6,7 @@ import { Checklist } from './Checklist';
 import { Coach } from './Coach';
 import { FinishCard } from './FinishCard';
 import { useNearViewport, useWideEnough } from './hooks';
+import { PlaygroundVideo } from './PlaygroundVideo';
 import { NONE, type Done } from './tasks';
 import './playground.css';
 
@@ -30,6 +31,17 @@ function Live() {
   const [bridge, setBridge] = useState<Bridge | null>(null);
   const [tips, setTips] = useState(true);
   const live = wide === true && near && status !== 'failed';
+  /* Going narrow unmounts the iframe; a wide stage again gets a fresh engine, so
+   * the previous run's status, ticks and copy must not carry over. */
+  const [wasLive, setWasLive] = useState(live);
+  if (live !== wasLive) {
+    setWasLive(live);
+    if (live) {
+      setStatus('loading');
+      setDone(NONE);
+      setCopy(null);
+    }
+  }
 
   useEffect(() => {
     const frame = frameRef.current;
@@ -60,38 +72,44 @@ function Live() {
 
   return (
     <div ref={wrapRef} className="playground">
-      <StageFrame url="forge.dev/login" className="scene-stage--playground">
-        <div className="playground__view">
-          {live ? (
-            <iframe
-              key={run}
-              ref={frameRef}
-              className="playground__frame"
-              src={FORGE_URL}
-              title="twiddle running on a sample sign-in page"
-              allow="clipboard-write"
-            />
-          ) : null}
-          {status === 'loading' ? (
-            <div className="playground__veil">
-              <span className="playground__spinner" aria-hidden="true" />
-              Starting twiddle…
+      {wide === false || status === 'failed' ? (
+        <PlaygroundVideo />
+      ) : (
+        <>
+          <StageFrame url="forge.dev/login" className="scene-stage--playground">
+            <div className="playground__view">
+              {live ? (
+                <iframe
+                  key={run}
+                  ref={frameRef}
+                  className="playground__frame"
+                  src={FORGE_URL}
+                  title="twiddle running on a sample sign-in page"
+                  allow="clipboard-write"
+                />
+              ) : null}
+              {status === 'loading' ? (
+                <div className="playground__veil">
+                  <span className="playground__spinner" aria-hidden="true" />
+                  Starting twiddle…
+                </div>
+              ) : null}
+              {status === 'off' ? (
+                <div className="playground__veil">
+                  <p>twiddle is off.</p>
+                  <button type="button" className="site-ghost" onClick={() => bridge?.turnOn()}>
+                    <Power size={16} strokeWidth={2.25} aria-hidden="true" />
+                    Turn it back on
+                  </button>
+                </div>
+              ) : null}
+              {status === 'ready' && bridge && !copy && tips ? <Coach bridge={bridge} done={done} onClose={() => setTips(false)} /> : null}
+              {copy ? <FinishCard copy={copy} onClose={() => setCopy(null)} /> : null}
             </div>
-          ) : null}
-          {status === 'off' ? (
-            <div className="playground__veil">
-              <p>twiddle is off.</p>
-              <button type="button" className="site-ghost" onClick={() => bridge?.turnOn()}>
-                <Power size={16} strokeWidth={2.25} aria-hidden="true" />
-                Turn it back on
-              </button>
-            </div>
-          ) : null}
-          {status === 'ready' && bridge && !copy && tips ? <Coach bridge={bridge} done={done} onClose={() => setTips(false)} /> : null}
-          {copy ? <FinishCard copy={copy} onClose={() => setCopy(null)} /> : null}
-        </div>
-      </StageFrame>
-      <Checklist done={done} onReset={reset} />
+          </StageFrame>
+          <Checklist done={done} onReset={reset} />
+        </>
+      )}
     </div>
   );
 }

@@ -343,3 +343,34 @@
     animation: none;
   }
 }
+
+/* ---- Video fallback ---- */
+
+.scene-stage--video .scene-stage__view {
+  height: auto;
+}
+
+.playground-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1100 / 776;
+  background: #fafafa;
+}
+
+.playground-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tw-space-2);
+  max-width: 48ch;
+  margin: var(--tw-space-4) auto 0;
+  color: var(--tw-fg-secondary);
+  font-size: var(--tw-text-sm);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.playground-note svg {
+  flex: none;
+}
