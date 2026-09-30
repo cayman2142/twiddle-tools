@@ -1,8 +1,8 @@
 /* Spec Lens chrome tokens
  * Primitives: src/tokens/primitives.css (shared with the marketing site)
  * Semantics + chrome type: this file — consumed by spec-lens.css
- * Theme: html[data-sl-theme] (catalog / site) + [data-sl-chrome][data-sl-theme]
- * (inject). Plugin never writes data-sl-theme on html.
+ * Theme: html[data-twc-theme] (catalog / site) + [data-twc-chrome][data-twc-theme]
+ * (inject). Plugin never writes data-twc-theme on html.
  * Overlay role solids stay on light-scale steps so hatch stays readable on any host.
  */
 @import url('./tokens/primitives.css');
@@ -11,35 +11,35 @@
  * FE-07 — badge fills carry 10px/600 white text, so WCAG AA small-text (4.5:1)
  * applies. The -9 steps failed it (blue-9 3.26, crimson-9 3.85, teal-9 3.07),
  * so every role solid now sits on its -11 step, following the precedent already
- * set by --sl-role-gap (amber-11 was darkened from amber-9 for exactly this).
- * Ratios below are white (#ffffff = --sl-fg-on-accent) on the fill.
+ * set by --twc-role-gap (amber-11 was darkened from amber-9 for exactly this).
+ * Ratios below are white (#ffffff = --twc-fg-on-accent) on the fill.
  * Hue identity is preserved: blue 210 / crimson 340 / amber 42 / teal 174 /
  * orange-red 12 stay five distinct hues (DESIGN.md Do #3). Hatch STRIPE mixes
- * keep the -9 steps (--sl-hatch-*-9 below) so the bands stay visually
+ * keep the -9 steps (--twc-hatch-*-9 below) so the bands stay visually
  * distinguishable on any host background.
  */
 html {
-  --sl-role-pad: #0d74ce;      /* blue-11    — white 4.77:1 (was blue-9 3.26) */
-  --sl-role-margin: #cb1d63;   /* crimson-11 — white 5.39:1 (was crimson-9 3.85) */
-  --sl-role-gap: #ab6400;      /* amber-11   — white 4.61:1 (unchanged) */
-  --sl-role-space: #008573;    /* teal-11    — white 4.56:1 (was teal-9 3.07) */
-  --sl-role-measure: #c8391c;  /* orange-red — white 5.2:1 */
+  --twc-role-pad: #0d74ce;      /* blue-11    — white 4.77:1 (was blue-9 3.26) */
+  --twc-role-margin: #cb1d63;   /* crimson-11 — white 5.39:1 (was crimson-9 3.85) */
+  --twc-role-gap: #ab6400;      /* amber-11   — white 4.61:1 (unchanged) */
+  --twc-role-space: #008573;    /* teal-11    — white 4.56:1 (was teal-9 3.07) */
+  --twc-role-measure: #c8391c;  /* orange-red — white 5.2:1 */
   /* -9 steps kept for the hatch stripe color-mix() only — band hues stay
      visually distinct between roles at 6-36% alpha. */
-  --sl-role-pad-9: #0090ff;    /* blue-9 */
-  --sl-role-margin-9: #e93d82; /* crimson-9 */
-  --sl-role-gap-9: #ab6400;    /* amber-11 (gap band was already this) */
-  --sl-role-space-9: #12a594;  /* teal-9 */
+  --twc-role-pad-9: #0090ff;    /* blue-9 */
+  --twc-role-margin-9: #e93d82; /* crimson-9 */
+  --twc-role-gap-9: #ab6400;    /* amber-11 (gap band was already this) */
+  --twc-role-space-9: #12a594;  /* teal-9 */
   /* F-11 focus isolation — dark page dim around pin (not theme-flipped) */
-  --sl-focus-scrim: color-mix(in srgb, #000 48%, transparent);
-  --sl-fg-on-accent: #ffffff;
-  --sl-white: #ffffff;
+  --twc-focus-scrim: color-mix(in srgb, #000 48%, transparent);
+  --twc-fg-on-accent: #ffffff;
+  --twc-white: #ffffff;
   /* Color-picker paint surfaces (checkerboard / hue ramp) — not chrome UI ink */
-  --sl-cp-check-a: #cccccc;
-  --sl-cp-check-b: #ffffff;
-  --sl-cp-black: #000000;
-  --sl-cp-hue-fallback: #ff0000;
-  --sl-cp-hue-ramp: linear-gradient(
+  --twc-cp-check-a: #cccccc;
+  --twc-cp-check-b: #ffffff;
+  --twc-cp-black: #000000;
+  --twc-cp-hue-fallback: #ff0000;
+  --twc-cp-hue-ramp: linear-gradient(
     to right,
     #ff0000,
     #ffff00,
@@ -49,51 +49,51 @@ html {
     #ff00ff,
     #ff0000
   );
-  --sl-cp-checker: repeating-conic-gradient(
-    var(--sl-cp-check-a) 0% 25%,
-    var(--sl-cp-check-b) 0% 50%
+  --twc-cp-checker: repeating-conic-gradient(
+    var(--twc-cp-check-a) 0% 25%,
+    var(--twc-cp-check-b) 0% 50%
   ) 0 0 / 8px 8px;
 
   /* Adaptive canvas — always a dark stage (independent of chrome theme). */
-  --sl-adapt-bg: #1a1b1e;
-  --sl-adapt-top: color-mix(in srgb, #111 88%, #fff 12%);
-  --sl-adapt-ink: #e8eaed;
-  --sl-adapt-muted: #c4c7cc;
-  --sl-adapt-faint: #9aa0a6;
-  --sl-adapt-menu: #25262b;
-  --sl-adapt-blocked: #2a2b30;
-  --sl-adapt-shell: #000000;
-  --sl-adapt-iframe: #ffffff;
-  --sl-adapt-line: color-mix(in srgb, #fff 12%, transparent);
-  --sl-adapt-line-soft: color-mix(in srgb, #fff 10%, transparent);
-  --sl-adapt-line-strong: color-mix(in srgb, #fff 14%, transparent);
-  --sl-adapt-fill: color-mix(in srgb, #fff 6%, transparent);
-  --sl-adapt-fill-hover: color-mix(in srgb, #fff 12%, transparent);
-  --sl-adapt-fill-soft: color-mix(in srgb, #fff 10%, transparent);
-  --sl-adapt-dot: color-mix(in srgb, #fff 14%, transparent);
-  --sl-adapt-shadow: 0 12px 40px color-mix(in srgb, #000 45%, transparent);
-  --sl-adapt-shell-shadow:
-    0 0 0 1px var(--sl-adapt-line),
+  --twc-adapt-bg: #1a1b1e;
+  --twc-adapt-top: color-mix(in srgb, #111 88%, #fff 12%);
+  --twc-adapt-ink: #e8eaed;
+  --twc-adapt-muted: #c4c7cc;
+  --twc-adapt-faint: #9aa0a6;
+  --twc-adapt-menu: #25262b;
+  --twc-adapt-blocked: #2a2b30;
+  --twc-adapt-shell: #000000;
+  --twc-adapt-iframe: #ffffff;
+  --twc-adapt-line: color-mix(in srgb, #fff 12%, transparent);
+  --twc-adapt-line-soft: color-mix(in srgb, #fff 10%, transparent);
+  --twc-adapt-line-strong: color-mix(in srgb, #fff 14%, transparent);
+  --twc-adapt-fill: color-mix(in srgb, #fff 6%, transparent);
+  --twc-adapt-fill-hover: color-mix(in srgb, #fff 12%, transparent);
+  --twc-adapt-fill-soft: color-mix(in srgb, #fff 10%, transparent);
+  --twc-adapt-dot: color-mix(in srgb, #fff 14%, transparent);
+  --twc-adapt-shadow: 0 12px 40px color-mix(in srgb, #000 45%, transparent);
+  --twc-adapt-shell-shadow:
+    0 0 0 1px var(--twc-adapt-line),
     0 18px 50px color-mix(in srgb, #000 45%, transparent);
-  --sl-ink-12: color-mix(in srgb, #000 12%, transparent);
+  --twc-ink-12: color-mix(in srgb, #000 12%, transparent);
 
   /* ---- Shape ------------------------------------------------------------
    * DESIGN.md documented this scale in YAML but it was never emitted as CSS,
    * so 116 literal radii drifted (5px, 1px, and `50%` competing with `full`).
    * Chrome consumes these names; a raw px radius is now a review finding.
    */
-  --sl-r-xs: 3px;
-  --sl-r-sm: 4px;
-  --sl-r-md: 6px;
-  --sl-r-lg: 8px;
-  --sl-r-xl: 10px;
-  --sl-r-2xl: 12px;
+  --twc-r-xs: 3px;
+  --twc-r-sm: 4px;
+  --twc-r-md: 6px;
+  --twc-r-lg: 8px;
+  --twc-r-xl: 10px;
+  --twc-r-2xl: 12px;
   /* Dock toolbar pill — between 2xl and 3xl; Paper light chrome (2026-09). */
-  --sl-r-toolbar: 14px;
+  --twc-r-toolbar: 14px;
   /* Panel inner cards — Paper Spec Lens panel shell (2026-09-11). */
-  --sl-r-card: 16px;
-  --sl-r-3xl: 20px;
-  --sl-r-full: 999px;
+  --twc-r-card: 16px;
+  --twc-r-3xl: 20px;
+  --twc-r-full: 999px;
 
   /* ---- Space ------------------------------------------------------------
    * Ratified from the shipped code, not from intent: 2px and 6px carried 110
@@ -101,213 +101,213 @@ html {
    * dense-chrome steps are named rather than pretended away. 3/5/7/9/14px are
    * off-scale half-steps and were migrated to their nearest neighbour.
    */
-  --sl-space-2: 2px;
-  --sl-space-4: 4px;
-  --sl-space-6: 6px;
-  --sl-space-8: 8px;
+  --twc-space-2: 2px;
+  --twc-space-4: 4px;
+  --twc-space-6: 6px;
+  --twc-space-8: 8px;
   /* 10 is a real step, not drift: 17 declarations, more than 12px (11) and far
-     more than 16px (1), and it is already the --sl-r-xl radius. Ratifying it
+     more than 16px (1), and it is already the --twc-r-xl radius. Ratifying it
      beats retyping 17 values to pretend a scale that was never used. The true
      half-steps — 5px and 3px — are migrated to their neighbours instead. */
-  --sl-space-10: 10px;
-  --sl-space-12: 12px;
-  --sl-space-16: 16px;
+  --twc-space-10: 10px;
+  --twc-space-12: 12px;
+  --twc-space-16: 16px;
 
   /* ---- Type -------------------------------------------------------------- */
-  --sl-font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --sl-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --sl-text-2xs: 10px;
-  --sl-text-xs: 11px;
-  --sl-text-sm: 12px;
-  --sl-text-md: 13px;
+  --twc-font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --twc-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --twc-text-2xs: 10px;
+  --twc-text-xs: 11px;
+  --twc-text-sm: 12px;
+  --twc-text-md: 13px;
 
   /* ---- Motion ------------------------------------------------------------
    * One decel curve for state, one exponential-out for overlays entering, and
-   * --sl-ease-snap for the magnetic dock ONLY. Durations are named so 120ms and
+   * --twc-ease-snap for the magnetic dock ONLY. Durations are named so 120ms and
    * .15s stop coexisting 30ms apart for no reason.
    *
-   * --sl-ease-snap overshoots, which is a deliberate and narrow exception to
+   * --twc-ease-snap overshoots, which is a deliberate and narrow exception to
    * "real objects decelerate smoothly". It is 3.0% (measured: peak y = 1.0299
    * at t = 0.684) — about 10px on a 340px panel — a single settle, not an
    * oscillating bounce, and it fires only when a direct-manipulation drag
    * releases into a magnet. That overshoot IS the "it locked in" signal, the
    * same one macOS window snapping and Figma's snap use. It is deliberately
    * named for the gesture rather than for the curve so it does not spread:
-   * anything that is not the dock snap uses --sl-ease or --sl-ease-out.
+   * anything that is not the dock snap uses --twc-ease or --twc-ease-out.
    */
-  --sl-ease: cubic-bezier(0.2, 0, 0, 1);
-  --sl-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --sl-ease-snap: cubic-bezier(0.34, 1.3, 0.5, 1);
-  --sl-dur-1: 90ms;
-  --sl-dur-2: 140ms;
-  --sl-dur-3: 220ms;
+  --twc-ease: cubic-bezier(0.2, 0, 0, 1);
+  --twc-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --twc-ease-snap: cubic-bezier(0.34, 1.3, 0.5, 1);
+  --twc-dur-1: 90ms;
+  --twc-dur-2: 140ms;
+  --twc-dur-3: 220ms;
 
   /* Disabled controls: one floor, not opacity .35 / .38 / .45 in three files.
      Opacity alone composited fg-muted down to 2.22:1, which reads as broken
      rather than inactive, so the ink is a token and carries the ratio on its
      own. Kept at 1 because any opacity < 1 composites that token back below
      the 3:1 non-text floor (0.9 measured 2.87:1 on the light toolbar) — the
-     colour is the disabled signal. See --sl-fg-disabled per theme. */
-  --sl-disabled-opacity: 1;
+     colour is the disabled signal. See --twc-fg-disabled per theme. */
+  --twc-disabled-opacity: 1;
 }
 
 /* ---- Light primitives + semantics ---- */
-html:not([data-sl-theme]),
-html[data-sl-theme="light"],
-[data-sl-chrome]:not([data-sl-theme]),
-[data-sl-chrome][data-sl-theme="light"] {
-  --sl-bg: var(--sl-gray-1);
-  --sl-surface: var(--sl-white);
-  --sl-surface-muted: var(--sl-gray-2);
-  --sl-surface-subtle: var(--sl-gray-3);
-  --sl-fg: var(--sl-gray-12);
-  --sl-fg-secondary: var(--sl-gray-11);
-  /* FE-07 — was gray-10 (3.79:1 on --sl-surface); gray-10a = 5.33:1. */
-  --sl-fg-muted: var(--sl-gray-10a);
-  --sl-border: var(--sl-gray-4);
-  --sl-border-strong: var(--sl-gray-6);
-  --sl-border-control: var(--sl-gray-7);
-  --sl-switch-track: var(--sl-gray-6);
+html:not([data-twc-theme]),
+html[data-twc-theme="light"],
+[data-twc-chrome]:not([data-twc-theme]),
+[data-twc-chrome][data-twc-theme="light"] {
+  --twc-bg: var(--twc-gray-1);
+  --twc-surface: var(--twc-white);
+  --twc-surface-muted: var(--twc-gray-2);
+  --twc-surface-subtle: var(--twc-gray-3);
+  --twc-fg: var(--twc-gray-12);
+  --twc-fg-secondary: var(--twc-gray-11);
+  /* FE-07 — was gray-10 (3.79:1 on --twc-surface); gray-10a = 5.33:1. */
+  --twc-fg-muted: var(--twc-gray-10a);
+  --twc-border: var(--twc-gray-4);
+  --twc-border-strong: var(--twc-gray-6);
+  --twc-border-control: var(--twc-gray-7);
+  --twc-switch-track: var(--twc-gray-6);
   /* WCAG 1.4.11 — the off-track fill is 1.41:1 against surface, so the
      component boundary carries the 3:1 instead (gray-9 = 3.54:1). */
-  --sl-switch-track-ring: var(--sl-gray-9);
+  --twc-switch-track-ring: var(--twc-gray-9);
   /* gray-9 on surface = 3.32:1 — clears the 3:1 non-text floor while still
      reading as inactive. */
-  --sl-fg-disabled: var(--sl-gray-9);
-  --sl-accent: var(--sl-blue-9);
-  --sl-accent-hover: var(--sl-blue-10);
+  --twc-fg-disabled: var(--twc-gray-9);
+  --twc-accent: var(--twc-blue-9);
+  --twc-accent-hover: var(--twc-blue-10);
   /* Active Spec / X-ray — Paper Spec-on default + hover (oklab → sRGB). */
-  --sl-toolbar-on-top: #439be7;
-  --sl-toolbar-on-bot: #0c74ce;
-  --sl-toolbar-on-hover-top: #67adeb;
-  --sl-toolbar-on-hover-bot: #4592d6;
-  --sl-toolbar-on-ring: #186ab4;
-  --sl-accent-subtle: var(--sl-blue-3);
+  --twc-toolbar-on-top: #439be7;
+  --twc-toolbar-on-bot: #0c74ce;
+  --twc-toolbar-on-hover-top: #67adeb;
+  --twc-toolbar-on-hover-bot: #4592d6;
+  --twc-toolbar-on-ring: #186ab4;
+  --twc-accent-subtle: var(--twc-blue-3);
   /* Filled accent that carries an icon or label. blue-9 gave white 3.26:1 —
      under AA — so solid fills use blue-11 (white 4.77:1) and blue-9 stays the
      stroke/focus hue. Small TEXT on accent uses the soft pair below, never
      this fill. */
-  --sl-accent-solid: var(--sl-blue-11);
-  --sl-accent-solid-hover: var(--sl-blue-12);
+  --twc-accent-solid: var(--twc-blue-11);
+  --twc-accent-solid-hover: var(--twc-blue-12);
   /* Soft-chip / soft-button label on accent-subtle (HeroUI soft primary) */
-  --sl-accent-soft-fg: var(--sl-blue-11a);
-  --sl-focus-ring: var(--sl-blue-9);
-  /* Edit / changes role — was raw var(--sl-violet-9) in five component rules,
+  --twc-accent-soft-fg: var(--twc-blue-11a);
+  --twc-focus-ring: var(--twc-blue-9);
+  /* Edit / changes role — was raw var(--twc-violet-9) in five component rules,
      which also collided with the retired "violet = Alt-measure" contract.
      White on it = 5.39:1; on the dark panel it reads 3.30:1 as a fill. */
-  --sl-role-edit: var(--sl-violet-9);
-  --sl-role-edit-ink: var(--sl-fg-on-accent);
-  --sl-warning: var(--sl-orange-9);
-  --sl-warning-bg: var(--sl-orange-3);
-  --sl-success: var(--sl-teal-9);
-  --sl-success-bg: var(--sl-teal-3);
-  --sl-off-scale: var(--sl-orange-11);
-  --sl-swatch-border: color-mix(in srgb, var(--sl-fg) 12%, transparent);
-  --sl-badge-ring: color-mix(in srgb, var(--sl-fg-on-accent) 35%, transparent);
-  --sl-shadow-fab: 0 8px 24px color-mix(in srgb, #000 12%, transparent);
+  --twc-role-edit: var(--twc-violet-9);
+  --twc-role-edit-ink: var(--twc-fg-on-accent);
+  --twc-warning: var(--twc-orange-9);
+  --twc-warning-bg: var(--twc-orange-3);
+  --twc-success: var(--twc-teal-9);
+  --twc-success-bg: var(--twc-teal-3);
+  --twc-off-scale: var(--twc-orange-11);
+  --twc-swatch-border: color-mix(in srgb, var(--twc-fg) 12%, transparent);
+  --twc-badge-ring: color-mix(in srgb, var(--twc-fg-on-accent) 35%, transparent);
+  --twc-shadow-fab: 0 8px 24px color-mix(in srgb, #000 12%, transparent);
   /* HeroUI-like overlay shadow — soft, not heavy drop */
-  --sl-shadow-panel: 0 4px 16px color-mix(in srgb, #18181b 8%, transparent);
-  --sl-shadow-settings: 0 12px 32px color-mix(in srgb, #000 16%, transparent);
-  --sl-shadow-tip: 0 6px 18px color-mix(in srgb, #000 14%, transparent);
-  --sl-shadow-switch: 0 1px 2px color-mix(in srgb, #000 20%, transparent);
+  --twc-shadow-panel: 0 4px 16px color-mix(in srgb, #18181b 8%, transparent);
+  --twc-shadow-settings: 0 12px 32px color-mix(in srgb, #000 16%, transparent);
+  --twc-shadow-tip: 0 6px 18px color-mix(in srgb, #000 14%, transparent);
+  --twc-shadow-switch: 0 1px 2px color-mix(in srgb, #000 20%, transparent);
   /* Soft lift for white cards on the gray panel shell (Paper 2026-09-11). */
-  --sl-shadow-card: 0 1px 2px color-mix(in srgb, #000 6%, transparent);
+  --twc-shadow-card: 0 1px 2px color-mix(in srgb, #000 6%, transparent);
   /* Panel in-hand while dragging — the one shadow still written as a literal in
      spec-lens.css, where the colour gate rejects it. Defined with its siblings. */
-  --sl-shadow-drag: 0 18px 48px color-mix(in srgb, #000 22%, transparent);
-  /* One focus halo. The old inline `0 0 0 2px var(--sl-accent-subtle)` was
+  --twc-shadow-drag: 0 18px 48px color-mix(in srgb, #000 22%, transparent);
+  /* One focus halo. The old inline `0 0 0 2px var(--twc-accent-subtle)` was
      repeated ten times and measured 1.12:1 against surface — decoration, not
      an indicator. This sits behind the outline, which stays the indicator. */
-  --sl-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--sl-focus-ring) 24%, transparent);
-  --sl-outline-veil: color-mix(in srgb, var(--sl-accent) 4%, transparent);
-  --sl-tok-copy-hover: color-mix(in srgb, var(--sl-accent) 12%, transparent);
+  --twc-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--twc-focus-ring) 24%, transparent);
+  --twc-outline-veil: color-mix(in srgb, var(--twc-accent) 4%, transparent);
+  --twc-tok-copy-hover: color-mix(in srgb, var(--twc-accent) 12%, transparent);
   /* Gray panel shell behind white section cards (Paper Spec Lens panel). */
-  --sl-panel-shell: var(--sl-gray-3);
+  --twc-panel-shell: var(--twc-gray-3);
   /* DO NOT DELETE as unreferenced. applyHatchBg() composes these names at
-     runtime — `'--sl-hatch-' + kind + '-a'` — so grepping for the literal
-     `--sl-hatch-pad-a` finds nothing while all four bands depend on them.
+     runtime — `'--twc-hatch-' + kind + '-a'` — so grepping for the literal
+     `--twc-hatch-pad-a` finds nothing while all four bands depend on them.
      Removing them silently blanks every padding / margin / gap / space stripe,
      which is the most visible thing Spec Lens draws. */
-  --sl-hatch-pad-a: color-mix(in srgb, var(--sl-role-pad-9) 22%, transparent);
-  --sl-hatch-pad-b: color-mix(in srgb, var(--sl-role-pad-9) 6%, transparent);
-  --sl-hatch-mar-a: color-mix(in srgb, var(--sl-role-margin-9) 28%, transparent);
-  --sl-hatch-mar-b: color-mix(in srgb, var(--sl-role-margin-9) 8%, transparent);
-  --sl-hatch-gap-a: color-mix(in srgb, var(--sl-role-gap-9) 32%, transparent);
-  --sl-hatch-gap-b: color-mix(in srgb, var(--sl-role-gap-9) 10%, transparent);
-  --sl-hatch-space-a: color-mix(in srgb, var(--sl-role-space-9) 32%, transparent);
-  --sl-hatch-space-b: color-mix(in srgb, var(--sl-role-space-9) 10%, transparent);
+  --twc-hatch-pad-a: color-mix(in srgb, var(--twc-role-pad-9) 22%, transparent);
+  --twc-hatch-pad-b: color-mix(in srgb, var(--twc-role-pad-9) 6%, transparent);
+  --twc-hatch-mar-a: color-mix(in srgb, var(--twc-role-margin-9) 28%, transparent);
+  --twc-hatch-mar-b: color-mix(in srgb, var(--twc-role-margin-9) 8%, transparent);
+  --twc-hatch-gap-a: color-mix(in srgb, var(--twc-role-gap-9) 32%, transparent);
+  --twc-hatch-gap-b: color-mix(in srgb, var(--twc-role-gap-9) 10%, transparent);
+  --twc-hatch-space-a: color-mix(in srgb, var(--twc-role-space-9) 32%, transparent);
+  --twc-hatch-space-b: color-mix(in srgb, var(--twc-role-space-9) 10%, transparent);
   /* Light needs no inset highlight — the drop shadow already reads. */
-  --sl-edge-highlight: 0 0 transparent;
+  --twc-edge-highlight: 0 0 transparent;
 }
 
 /* ---- Dark primitives + semantics ---- */
-html[data-sl-theme="dark"],
-[data-sl-chrome][data-sl-theme="dark"] {
-  --sl-bg: var(--sl-gray-1);
-  --sl-surface: var(--sl-gray-2);
-  --sl-surface-muted: var(--sl-gray-3);
-  --sl-surface-subtle: var(--sl-gray-4);
-  --sl-fg: var(--sl-gray-12);
-  --sl-fg-secondary: var(--sl-gray-11);
-  /* FE-07 — was gray-10 (4.15:1 on --sl-surface); gray-10a = 6.33:1. */
-  --sl-fg-muted: var(--sl-gray-10a);
-  --sl-border: var(--sl-gray-6);
-  --sl-border-strong: var(--sl-gray-7);
-  --sl-border-control: var(--sl-gray-8);
-  --sl-switch-track: var(--sl-gray-7);
+html[data-twc-theme="dark"],
+[data-twc-chrome][data-twc-theme="dark"] {
+  --twc-bg: var(--twc-gray-1);
+  --twc-surface: var(--twc-gray-2);
+  --twc-surface-muted: var(--twc-gray-3);
+  --twc-surface-subtle: var(--twc-gray-4);
+  --twc-fg: var(--twc-gray-12);
+  --twc-fg-secondary: var(--twc-gray-11);
+  /* FE-07 — was gray-10 (4.15:1 on --twc-surface); gray-10a = 6.33:1. */
+  --twc-fg-muted: var(--twc-gray-10a);
+  --twc-border: var(--twc-gray-6);
+  --twc-border-strong: var(--twc-gray-7);
+  --twc-border-control: var(--twc-gray-8);
+  --twc-switch-track: var(--twc-gray-7);
   /* WCAG 1.4.11 — gray-7 fill is 1.92:1 on surface; gray-9 ring = 3.17:1. */
-  --sl-switch-track-ring: var(--sl-gray-9);
+  --twc-switch-track-ring: var(--twc-gray-9);
   /* gray-9 on the dark surface = 3.45:1. */
-  --sl-fg-disabled: var(--sl-gray-9);
-  --sl-accent: var(--sl-blue-9);
-  --sl-accent-hover: var(--sl-blue-10);
-  --sl-toolbar-on-top: #439be7;
-  --sl-toolbar-on-bot: #0c74ce;
-  --sl-toolbar-on-hover-top: #67adeb;
-  --sl-toolbar-on-hover-bot: #4592d6;
-  --sl-toolbar-on-ring: #186ab4;
-  --sl-accent-subtle: var(--sl-blue-3);
+  --twc-fg-disabled: var(--twc-gray-9);
+  --twc-accent: var(--twc-blue-9);
+  --twc-accent-hover: var(--twc-blue-10);
+  --twc-toolbar-on-top: #439be7;
+  --twc-toolbar-on-bot: #0c74ce;
+  --twc-toolbar-on-hover-top: #67adeb;
+  --twc-toolbar-on-hover-bot: #4592d6;
+  --twc-toolbar-on-ring: #186ab4;
+  --twc-accent-subtle: var(--twc-blue-3);
   /* blue-8, not blue-9. Light was moved to blue-11 to fix white-on-accent at
      3.26:1 but dark was left on blue-9, reproducing the exact ratio the fix
      was written for. blue-8 #2870bd carries white at 5.04:1 and still reads
      4.37:1 against the dark panel, so the active state stays obvious. */
-  --sl-accent-solid: var(--sl-blue-8);
-  --sl-accent-solid-hover: var(--sl-blue-9);
+  --twc-accent-solid: var(--twc-blue-8);
+  --twc-accent-solid-hover: var(--twc-blue-9);
   /* blue-11 on blue-3 measures 7.08:1 here — no `a` step needed. */
-  --sl-accent-soft-fg: var(--sl-blue-11);
-  --sl-focus-ring: var(--sl-blue-9);
-  --sl-role-edit: var(--sl-violet-9);
-  --sl-role-edit-ink: var(--sl-fg-on-accent);
-  --sl-warning: var(--sl-orange-9);
-  --sl-warning-bg: var(--sl-orange-3);
-  --sl-success: var(--sl-teal-9);
-  --sl-success-bg: var(--sl-teal-3);
-  --sl-off-scale: var(--sl-orange-11);
-  --sl-swatch-border: color-mix(in srgb, var(--sl-fg) 18%, transparent);
-  --sl-badge-ring: color-mix(in srgb, var(--sl-fg-on-accent) 40%, transparent);
-  --sl-shadow-fab: 0 8px 24px color-mix(in srgb, #000 45%, transparent);
-  --sl-shadow-panel: 0 4px 24px color-mix(in srgb, #000 45%, transparent);
-  --sl-shadow-settings: 0 12px 32px color-mix(in srgb, #000 48%, transparent);
-  --sl-shadow-tip: 0 6px 18px color-mix(in srgb, #000 45%, transparent);
-  --sl-shadow-switch: 0 1px 2px color-mix(in srgb, #000 40%, transparent);
-  --sl-shadow-card: 0 1px 2px color-mix(in srgb, #000 35%, transparent);
-  --sl-shadow-drag: 0 18px 48px color-mix(in srgb, #000 55%, transparent);
-  --sl-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--sl-focus-ring) 32%, transparent);
-  --sl-outline-veil: color-mix(in srgb, var(--sl-accent) 8%, transparent);
-  --sl-tok-copy-hover: color-mix(in srgb, var(--sl-accent) 22%, transparent);
+  --twc-accent-soft-fg: var(--twc-blue-11);
+  --twc-focus-ring: var(--twc-blue-9);
+  --twc-role-edit: var(--twc-violet-9);
+  --twc-role-edit-ink: var(--twc-fg-on-accent);
+  --twc-warning: var(--twc-orange-9);
+  --twc-warning-bg: var(--twc-orange-3);
+  --twc-success: var(--twc-teal-9);
+  --twc-success-bg: var(--twc-teal-3);
+  --twc-off-scale: var(--twc-orange-11);
+  --twc-swatch-border: color-mix(in srgb, var(--twc-fg) 18%, transparent);
+  --twc-badge-ring: color-mix(in srgb, var(--twc-fg-on-accent) 40%, transparent);
+  --twc-shadow-fab: 0 8px 24px color-mix(in srgb, #000 45%, transparent);
+  --twc-shadow-panel: 0 4px 24px color-mix(in srgb, #000 45%, transparent);
+  --twc-shadow-settings: 0 12px 32px color-mix(in srgb, #000 48%, transparent);
+  --twc-shadow-tip: 0 6px 18px color-mix(in srgb, #000 45%, transparent);
+  --twc-shadow-switch: 0 1px 2px color-mix(in srgb, #000 40%, transparent);
+  --twc-shadow-card: 0 1px 2px color-mix(in srgb, #000 35%, transparent);
+  --twc-shadow-drag: 0 18px 48px color-mix(in srgb, #000 55%, transparent);
+  --twc-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--twc-focus-ring) 32%, transparent);
+  --twc-outline-veil: color-mix(in srgb, var(--twc-accent) 8%, transparent);
+  --twc-tok-copy-hover: color-mix(in srgb, var(--twc-accent) 22%, transparent);
   /* Shell darker than card surface so the stack still reads in dark chrome. */
-  --sl-panel-shell: var(--sl-gray-1);
+  --twc-panel-shell: var(--twc-gray-1);
   /* See the light block: composed at runtime by applyHatchBg(), never grep-able
      by literal name. Dark carries a heavier mix so bands read on a dark host. */
-  --sl-hatch-pad-a: color-mix(in srgb, var(--sl-role-pad-9) 28%, transparent);
-  --sl-hatch-pad-b: color-mix(in srgb, var(--sl-role-pad-9) 10%, transparent);
-  --sl-hatch-mar-a: color-mix(in srgb, var(--sl-role-margin-9) 32%, transparent);
-  --sl-hatch-mar-b: color-mix(in srgb, var(--sl-role-margin-9) 10%, transparent);
-  --sl-hatch-gap-a: color-mix(in srgb, var(--sl-role-gap-9) 36%, transparent);
-  --sl-hatch-gap-b: color-mix(in srgb, var(--sl-role-gap-9) 12%, transparent);
-  --sl-hatch-space-a: color-mix(in srgb, var(--sl-role-space-9) 36%, transparent);
-  --sl-hatch-space-b: color-mix(in srgb, var(--sl-role-space-9) 12%, transparent);
+  --twc-hatch-pad-a: color-mix(in srgb, var(--twc-role-pad-9) 28%, transparent);
+  --twc-hatch-pad-b: color-mix(in srgb, var(--twc-role-pad-9) 10%, transparent);
+  --twc-hatch-mar-a: color-mix(in srgb, var(--twc-role-margin-9) 32%, transparent);
+  --twc-hatch-mar-b: color-mix(in srgb, var(--twc-role-margin-9) 10%, transparent);
+  --twc-hatch-gap-a: color-mix(in srgb, var(--twc-role-gap-9) 36%, transparent);
+  --twc-hatch-gap-b: color-mix(in srgb, var(--twc-role-gap-9) 12%, transparent);
+  --twc-hatch-space-a: color-mix(in srgb, var(--twc-role-space-9) 36%, transparent);
+  --twc-hatch-space-b: color-mix(in srgb, var(--twc-role-space-9) 12%, transparent);
   /* Dark elevation: a black drop shadow is invisible on a near-black host, so
      the dock and panel also carry a top inset highlight to read as raised. */
-  --sl-edge-highlight: inset 0 1px 0 color-mix(in srgb, #fff 7%, transparent);
+  --twc-edge-highlight: inset 0 1px 0 color-mix(in srgb, #fff 7%, transparent);
 }

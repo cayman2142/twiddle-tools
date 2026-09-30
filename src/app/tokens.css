@@ -26,17 +26,17 @@ html {
   --tw-space-6: 24px;
   --tw-space-8: 32px;
   --tw-space-12: 48px;
-  --tw-bg: var(--sl-gray-1);
-  --tw-surface: var(--sl-white);
-  --tw-fg: var(--sl-gray-12);
-  --tw-fg-secondary: var(--sl-gray-11);
-  --tw-fg-muted: var(--sl-gray-10a);
-  --tw-fg-on-accent: var(--sl-fg-on-accent);
-  --tw-border: var(--sl-gray-6);
-  --tw-accent: var(--sl-blue-9);
-  --tw-accent-solid: var(--sl-blue-11);
-  --tw-focus-ring: var(--sl-blue-9);
-  --tw-bezel: var(--sl-gray-12);
-  --tw-fg-on-bezel: var(--sl-fg-on-accent);
+  --tw-bg: var(--twc-gray-1);
+  --tw-surface: var(--twc-white);
+  --tw-fg: var(--twc-gray-12);
+  --tw-fg-secondary: var(--twc-gray-11);
+  --tw-fg-muted: var(--twc-gray-10a);
+  --tw-fg-on-accent: var(--twc-fg-on-accent);
+  --tw-border: var(--twc-gray-6);
+  --tw-accent: var(--twc-blue-9);
+  --tw-accent-solid: var(--twc-blue-11);
+  --tw-focus-ring: var(--twc-blue-9);
+  --tw-bezel: var(--twc-gray-12);
+  --tw-fg-on-bezel: var(--twc-fg-on-accent);
 }
 

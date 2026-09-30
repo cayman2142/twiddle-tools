@@ -62,7 +62,7 @@ code {
   width: 100%;
   max-width: calc(var(--tw-measure) + var(--tw-space-8) + var(--tw-space-8));
   margin: 0;
-  padding: calc(var(--tw-space-12) + var(--tw-space-8)) var(--tw-space-8) var(--tw-space-8);
+  padding: calc(var(--tw-space-12) * 2 + var(--tw-space-8)) var(--tw-space-8) calc(var(--tw-space-12) + var(--tw-space-8));
 }
 
 .site-doc h1,

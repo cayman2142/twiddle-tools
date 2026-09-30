@@ -57,7 +57,7 @@ export function Icon({ name, size = 14 }: { name: IconName | string; size?: numb
 
 export function TabIcon({ name }: { name: string }) {
   return (
-    <span className="sl-panel__tab-ico" aria-hidden="true">
+    <span className="twc-panel__tab-ico" aria-hidden="true">
       <Icon name={name} size={14} />
     </span>
   );

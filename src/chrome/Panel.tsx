@@ -19,7 +19,7 @@ function Tabs({ tab }: { tab: Tab }) {
     ['changes', 'changes', 'Changes'],
   ];
   return (
-    <div className="sl-panel__tabs" role="tablist" aria-label="Twiddle views">
+    <div className="twc-panel__tabs" role="tablist" aria-label="Twiddle views">
       {items.map(([id, icon, label]) => {
         const on = tab === id;
         return (
@@ -27,7 +27,7 @@ function Tabs({ tab }: { tab: Tab }) {
             key={id}
             type="button"
             role="tab"
-            className={`sl-panel__tab${on ? ' is-on' : ''}`}
+            className={`twc-panel__tab${on ? ' is-on' : ''}`}
             aria-selected={on}
             aria-label={label}
             tabIndex={-1}
@@ -42,16 +42,16 @@ function Tabs({ tab }: { tab: Tab }) {
 
 export function Panel({ tab = 'spec', children }: Props) {
   return (
-    <div className="sl-panel is-visible">
-      <div className="sl-panel__card sl-panel__card--chrome">
-        <div className="sl-panel__handle" tabIndex={-1} aria-label="Move panel">
-          <span className="sl-panel__grip" aria-hidden="true">
+    <div className="twc-panel is-visible">
+      <div className="twc-panel__card twc-panel__card--chrome">
+        <div className="twc-panel__handle" tabIndex={-1} aria-label="Move panel">
+          <span className="twc-panel__grip" aria-hidden="true">
             <Icon name="grip" size={12} />
           </span>
         </div>
         <Tabs tab={tab} />
       </div>
-      <div className="sl-rows">{children}</div>
+      <div className="twc-rows">{children}</div>
     </div>
   );
 }
@@ -59,39 +59,39 @@ export function Panel({ tab = 'spec', children }: Props) {
 export function SpecInspectPanel() {
   return (
     <Panel tab="spec">
-      <div className="sl-panel__card sl-panel__card--meta">
-        <div className="sl-panel__head">
-          <div className="sl-panel__status">
-            <button type="button" className="sl-panel__token-hint" title="No matching spacing token" tabIndex={-1}>
+      <div className="twc-panel__card twc-panel__card--meta">
+        <div className="twc-panel__head">
+          <div className="twc-panel__status">
+            <button type="button" className="twc-panel__token-hint" title="No matching spacing token" tabIndex={-1}>
               No matching spacing token
             </button>
           </div>
-          <div className="sl-panel__head-row">
-            <span className="sl-panel__tag">button</span>
-            <button type="button" className="sl-panel__pin" aria-pressed="true" tabIndex={-1}>
-              <span className="sl-panel__pin-text">Pinned</span>
+          <div className="twc-panel__head-row">
+            <span className="twc-panel__tag">button</span>
+            <button type="button" className="twc-panel__pin" aria-pressed="true" tabIndex={-1}>
+              <span className="twc-panel__pin-text">Pinned</span>
             </button>
           </div>
         </div>
       </div>
-      <div className="sl-section">
-        <button type="button" className="sl-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="sl-section__label">Typography</span>
+      <div className="twc-section">
+        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
+          <span className="twc-section__label">Typography</span>
         </button>
-        <div className="sl-section__body">
-          <div className="sl-section__inner">
-            <div className="sl-row">
-              <span className="sl-row__key">font-size</span>
-              <span className="sl-row__val">
+        <div className="twc-section__body">
+          <div className="twc-section__inner">
+            <div className="twc-row">
+              <span className="twc-row__key">font-size</span>
+              <span className="twc-row__val">
                 <TokenChip name="--text-md" />
               </span>
             </div>
           </div>
         </div>
       </div>
-      <div className="sl-panel__footer">
-        <div className="sl-panel__copy-split">
-          <button type="button" className="sl-ghost" aria-label="Copy as Agent MD" tabIndex={-1}>
+      <div className="twc-panel__footer">
+        <div className="twc-panel__copy-split">
+          <button type="button" className="twc-ghost" aria-label="Copy as Agent MD" tabIndex={-1}>
             Copy as Agent MD
           </button>
         </div>
@@ -100,59 +100,67 @@ export function SpecInspectPanel() {
   );
 }
 
-export function EditPanel({ padding, widthMode = 'Hug' }: { padding: [string, string, string, string]; widthMode?: 'Fixed' | 'Hug' | 'Fill' }) {
+export function EditPanel({
+  padding,
+  widthMode = 'Hug',
+  edited = false,
+}: {
+  padding: [string, string, string, string];
+  widthMode?: 'Fixed' | 'Hug' | 'Fill';
+  edited?: boolean;
+}) {
   return (
     <Panel tab="spec">
-      <div className="sl-panel__card sl-panel__card--meta">
-        <div className="sl-panel__head">
-          <div className="sl-panel__head-row">
-            <span className="sl-panel__tag">form</span>
-            <button type="button" className="sl-panel__pin" aria-pressed="true" tabIndex={-1}>
-              <span className="sl-panel__pin-text">Pinned</span>
+      <div className="twc-panel__card twc-panel__card--meta">
+        <div className="twc-panel__head">
+          <div className="twc-panel__head-row">
+            <span className="twc-panel__tag">form</span>
+            <button type="button" className="twc-panel__pin" aria-pressed="true" tabIndex={-1}>
+              <span className="twc-panel__pin-text">Pinned</span>
             </button>
           </div>
         </div>
       </div>
-      <div className="sl-section">
-        <button type="button" className="sl-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="sl-section__label">Size</span>
+      <div className="twc-section">
+        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
+          <span className="twc-section__label">Size</span>
         </button>
-        <div className="sl-section__body">
-          <div className="sl-section__inner">
-            <div className="sl-row">
-              <span className="sl-row__key">width</span>
-              <span className="sl-row__val">
+        <div className="twc-section__body">
+          <div className="twc-section__inner">
+            <div className="twc-row">
+              <span className="twc-row__key">width</span>
+              <span className="twc-row__val">
                 <SizeRow value="320" mode={widthMode} />
               </span>
             </div>
           </div>
         </div>
       </div>
-      <div className="sl-section">
-        <button type="button" className="sl-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="sl-section__label">Spacing</span>
+      <div className="twc-section">
+        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
+          <span className="twc-section__label">Spacing</span>
         </button>
-        <div className="sl-section__body">
-          <div className="sl-section__inner">
-            <div className="sl-row">
-              <span className="sl-row__key">padding</span>
-              <span className="sl-row__val">
-                <SidesEditor values={padding} />
+        <div className="twc-section__body">
+          <div className="twc-section__inner">
+            <div className="twc-row">
+              <span className="twc-row__key">padding</span>
+              <span className="twc-row__val">
+                <SidesEditor values={padding} edited={edited} />
               </span>
             </div>
           </div>
         </div>
       </div>
-      <div className="sl-section">
-        <button type="button" className="sl-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="sl-section__label">Fill</span>
+      <div className="twc-section">
+        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
+          <span className="twc-section__label">Fill</span>
         </button>
-        <div className="sl-section__body">
-          <div className="sl-section__inner">
-            <div className="sl-row">
-              <span className="sl-row__key">color</span>
-              <span className="sl-row__val">
-                <ColorField hex="0F766E" swatch="var(--color-brand)" />
+        <div className="twc-section__body">
+          <div className="twc-section__inner">
+            <div className="twc-row">
+              <span className="twc-row__key">color</span>
+              <span className="twc-row__val">
+                <ColorField hex="0F766E" swatch="#0f766e" />
               </span>
             </div>
           </div>
@@ -181,46 +189,46 @@ export function BoxEditPanel({
 }) {
   return (
     <Panel tab="spec">
-      <div className="sl-panel__card sl-panel__card--meta">
-        <div className="sl-panel__head">
-          <div className="sl-panel__head-row">
-            <span className="sl-panel__tag">{tag}</span>
-            <button type="button" className="sl-panel__pin" aria-pressed="true" tabIndex={-1}>
-              <span className="sl-panel__pin-text">Pinned</span>
+      <div className="twc-panel__card twc-panel__card--meta">
+        <div className="twc-panel__head">
+          <div className="twc-panel__head-row">
+            <span className="twc-panel__tag">{tag}</span>
+            <button type="button" className="twc-panel__pin" aria-pressed="true" tabIndex={-1}>
+              <span className="twc-panel__pin-text">Pinned</span>
             </button>
           </div>
         </div>
       </div>
-      <div className="sl-section">
-        <button type="button" className="sl-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="sl-section__label">Spacing</span>
+      <div className="twc-section">
+        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
+          <span className="twc-section__label">Spacing</span>
         </button>
-        <div className="sl-section__body">
-          <div className="sl-section__inner">
-            <div className="sl-row">
-              <span className="sl-row__key">padding</span>
-              <span className="sl-row__val">
+        <div className="twc-section__body">
+          <div className="twc-section__inner">
+            <div className="twc-row">
+              <span className="twc-row__key">padding</span>
+              <span className="twc-row__val">
                 <SidesEditor values={padding} onChange={onPadding} />
               </span>
             </div>
-            <div className="sl-row">
-              <span className="sl-row__key">margin</span>
-              <span className="sl-row__val">
+            <div className="twc-row">
+              <span className="twc-row__key">margin</span>
+              <span className="twc-row__val">
                 <SidesEditor values={margin} onChange={onMargin} />
               </span>
             </div>
           </div>
         </div>
       </div>
-      <div className="sl-section">
-        <button type="button" className="sl-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="sl-section__label">Corner</span>
+      <div className="twc-section">
+        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
+          <span className="twc-section__label">Corner</span>
         </button>
-        <div className="sl-section__body">
-          <div className="sl-section__inner">
-            <div className="sl-row">
-              <span className="sl-row__key">radius</span>
-              <span className="sl-row__val">
+        <div className="twc-section__body">
+          <div className="twc-section__inner">
+            <div className="twc-row">
+              <span className="twc-row__key">radius</span>
+              <span className="twc-row__val">
                 <SidesEditor values={radius} onChange={onRadius} kind="radius" />
               </span>
             </div>
@@ -234,53 +242,53 @@ export function BoxEditPanel({
 export function TokensPanel({ bound }: { bound: boolean }) {
   return (
     <Panel tab="spec">
-      <div className="sl-panel__card sl-panel__card--meta">
-        <div className="sl-panel__head">
-          <div className="sl-panel__status">
+      <div className="twc-panel__card twc-panel__card--meta">
+        <div className="twc-panel__head">
+          <div className="twc-panel__status">
             {bound ? (
-              <button type="button" className="sl-panel__token-hint" tabIndex={-1}>
+              <button type="button" className="twc-panel__token-hint" tabIndex={-1}>
                 Bound to this page
               </button>
             ) : (
-              <span className="sl-off">off-scale</span>
+              <span className="twc-off">off-scale</span>
             )}
           </div>
-          <div className="sl-panel__head-row">
-            <span className="sl-panel__tag">button</span>
-            <button type="button" className="sl-panel__pin" aria-pressed="true" tabIndex={-1}>
-              <span className="sl-panel__pin-text">Pinned</span>
+          <div className="twc-panel__head-row">
+            <span className="twc-panel__tag">button</span>
+            <button type="button" className="twc-panel__pin" aria-pressed="true" tabIndex={-1}>
+              <span className="twc-panel__pin-text">Pinned</span>
             </button>
           </div>
         </div>
       </div>
-      <div className="sl-section">
-        <button type="button" className="sl-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="sl-section__label">Spacing</span>
+      <div className="twc-section">
+        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
+          <span className="twc-section__label">Spacing</span>
         </button>
-        <div className="sl-section__body">
-          <div className="sl-section__inner">
-            <div className="sl-row">
-              <span className="sl-row__key">padding</span>
-              <span className="sl-row__val">
-                {bound ? <TokenChip name="--space-4" /> : <span>11px</span>}
+        <div className="twc-section__body">
+          <div className="twc-section__inner">
+            <div className="twc-row">
+              <span className="twc-row__key">padding</span>
+              <span className="twc-row__val">
+                {bound ? <TokenChip name="--space-4" /> : <span className="twc-off-val">11px 22px</span>}
               </span>
             </div>
           </div>
         </div>
       </div>
-      <div className="sl-section">
-        <button type="button" className="sl-section__head" aria-expanded="true" tabIndex={-1}>
-          <span className="sl-section__label">Fill</span>
+      <div className="twc-section">
+        <button type="button" className="twc-section__head" aria-expanded="true" tabIndex={-1}>
+          <span className="twc-section__label">Fill</span>
         </button>
-        <div className="sl-section__body">
-          <div className="sl-section__inner">
-            <div className="sl-row">
-              <span className="sl-row__key">background</span>
-              <span className="sl-row__val">
+        <div className="twc-section__body">
+          <div className="twc-section__inner">
+            <div className="twc-row">
+              <span className="twc-row__key">background</span>
+              <span className="twc-row__val">
                 <ColorField
                   hex={bound ? undefined : '0F766E'}
                   token={bound ? '--color-brand' : undefined}
-                  swatch="var(--color-brand)"
+                  swatch="#0f766e"
                 />
               </span>
             </div>

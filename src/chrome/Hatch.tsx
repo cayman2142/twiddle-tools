@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 
 type Props = {
-  value?: string;
+  size?: number;
 };
 
 export type BoxRect = { top: number; left: number; width: number; height: number };
@@ -43,8 +43,8 @@ function hatchFill(kind: HatchKind): CSSProperties {
   if (cached) return cached;
   if (typeof document === 'undefined') return {};
   const cs = getComputedStyle(document.documentElement);
-  const a = cs.getPropertyValue(`--sl-hatch-${kind}-a`).trim();
-  const b = cs.getPropertyValue(`--sl-hatch-${kind}-b`).trim();
+  const a = cs.getPropertyValue(`--twc-hatch-${kind}-a`).trim();
+  const b = cs.getPropertyValue(`--twc-hatch-${kind}-b`).trim();
   const style: CSSProperties =
     !a || !b
       ? {}
@@ -74,7 +74,7 @@ function Band({
   if (width < 0.5 || height < 0.5 || size < 0.5) return null;
   return (
     <div
-      className={`sl-hatch__band sl-hatch__band--${kind}`}
+      className={`twc-hatch__band twc-hatch__band--${kind}`}
       style={{
         left,
         top,
@@ -84,26 +84,29 @@ function Band({
         backgroundPosition: `${-left}px ${-top}px`,
       }}
     >
-      {width >= 12 || height >= 12 ? <span className="sl-hatch__badge">{size}</span> : null}
+      {width >= 12 || height >= 12 ? <span className="twc-hatch__badge">{size}</span> : null}
     </div>
   );
 }
 
-export function Hatch({ value = '16' }: Props) {
+/** Static padding hatch for the Relay scenes: four bands of `size` px. */
+export function Hatch({ size = 16 }: Props) {
   const fill = hatchFill('pad');
+  const band = `${size}px`;
+  const label = String(size);
   return (
-    <div className="sl-hatch is-visible" aria-hidden="true">
-      <div className="sl-hatch__band sl-hatch__band--pad sl-hatch__band--top" style={{ height: 'var(--space-4, 16px)', ...fill }}>
-        <span className="sl-hatch__badge">{value}</span>
+    <div className="twc-hatch is-visible" aria-hidden="true" style={{ ['--hatch' as string]: band }}>
+      <div className="twc-hatch__band twc-hatch__band--pad twc-hatch__band--top" style={fill}>
+        <span className="twc-hatch__badge">{label}</span>
       </div>
-      <div className="sl-hatch__band sl-hatch__band--pad sl-hatch__band--bottom" style={{ height: 'var(--space-4, 16px)', ...fill }}>
-        <span className="sl-hatch__badge">{value}</span>
+      <div className="twc-hatch__band twc-hatch__band--pad twc-hatch__band--bottom" style={fill}>
+        <span className="twc-hatch__badge">{label}</span>
       </div>
-      <div className="sl-hatch__band sl-hatch__band--pad sl-hatch__band--left" style={{ width: 'var(--space-4, 16px)', ...fill }}>
-        <span className="sl-hatch__badge">{value}</span>
+      <div className="twc-hatch__band twc-hatch__band--pad twc-hatch__band--left" style={fill}>
+        <span className="twc-hatch__badge">{label}</span>
       </div>
-      <div className="sl-hatch__band sl-hatch__band--pad sl-hatch__band--right" style={{ width: 'var(--space-4, 16px)', ...fill }}>
-        <span className="sl-hatch__badge">{value}</span>
+      <div className="twc-hatch__band twc-hatch__band--pad twc-hatch__band--right" style={fill}>
+        <span className="twc-hatch__badge">{label}</span>
       </div>
     </div>
   );
@@ -130,7 +133,7 @@ export function LiveHatch({ box, padding, margin }: { box: BoxRect; padding: Sid
   return (
     <>
       {hasPad ? (
-        <div className="sl-hatch is-visible sl-hatch--live" style={padStyle} aria-hidden="true">
+        <div className="twc-hatch is-visible twc-hatch--live" style={padStyle} aria-hidden="true">
           <Band kind="pad" size={pt} left={0} top={0} width={box.width} height={pt} />
           <Band kind="pad" size={pr} left={box.width - pr} top={pt} width={pr} height={padMidH} />
           <Band kind="pad" size={pb} left={0} top={box.height - pb} width={box.width} height={pb} />
@@ -138,7 +141,7 @@ export function LiveHatch({ box, padding, margin }: { box: BoxRect; padding: Sid
         </div>
       ) : null}
       {hasMar ? (
-        <div className="sl-hatch is-visible sl-hatch--live" style={marStyle} aria-hidden="true">
+        <div className="twc-hatch is-visible twc-hatch--live" style={marStyle} aria-hidden="true">
           <Band kind="mar" size={mt} left={ml} top={0} width={box.width} height={mt} />
           <Band kind="mar" size={mr} left={ml + box.width} top={mt} width={mr} height={box.height} />
           <Band kind="mar" size={mb} left={ml} top={mt + box.height} width={box.width} height={mb} />
@@ -150,9 +153,9 @@ export function LiveHatch({ box, padding, margin }: { box: BoxRect; padding: Sid
 }
 
 export function SizeChip({ label }: { label: string }) {
-  return <div className="sl-size-cap is-visible is-pinned">{label}</div>;
+  return <div className="twc-size-cap is-visible is-pinned">{label}</div>;
 }
 
 export function Outline() {
-  return <div className="sl-outline is-visible is-pinned" />;
+  return <div className="twc-outline is-visible is-pinned" />;
 }

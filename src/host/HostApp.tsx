@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ArrowRight, FolderKanban, House, Inbox, Kanban, Lock, Mail, Radio, Settings, Users } from 'lucide-react';
+import { ArrowRight, FolderKanban, House, Inbox, Kanban, Lock, Mail, Menu, Radio, Settings, Users } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Hatch, Outline, SizeChip } from '../chrome/Hatch';
 import './host.css';
@@ -8,16 +8,18 @@ export type HostPin = 'cta' | 'login' | 'card' | null;
 
 export type HostTweaks = {
   ctaPadding?: 'off' | 'token' | 'default';
-  loginEdited?: boolean;
+  loginPadding?: 16 | 24;
   duplicatedCard?: boolean;
-  hatch?: boolean;
+  /** Hatch band thickness in px; omit for no hatch. */
+  hatch?: number;
   sizeLabel?: string;
 };
 
 export type HostProps = {
-  width?: 'desktop' | 'phone';
   pinned?: HostPin;
   tweaks?: HostTweaks;
+  /** Drop the three cards on narrow stages unless the scene is about them. */
+  compact?: boolean;
 };
 
 function Pin({
@@ -29,17 +31,19 @@ function Pin({
 }: {
   id: Exclude<HostPin, null>;
   pinned?: HostPin;
-  hatch?: boolean;
+  hatch?: number;
   sizeLabel?: string;
   children: ReactNode;
 }) {
   if (pinned !== id) return <>{children}</>;
   return (
     <div className={`host-pin host-pin--${id}`}>
-      <Outline />
-      {hatch ? <Hatch value="16" /> : null}
       {sizeLabel ? <SizeChip label={sizeLabel} /> : null}
-      {children}
+      <div className="host-pin__box">
+        <Outline />
+        {hatch ? <Hatch size={hatch} /> : null}
+        {children}
+      </div>
     </div>
   );
 }
@@ -70,7 +74,10 @@ function Card({ title, body, icon: Glyph, duplicate = false }: { title: string; 
   );
 }
 
-export function HostApp({ width = 'desktop', pinned = null, tweaks = {} }: HostProps) {
+/* "Relay" — a made-up app standing in for the page under inspection. It has its
+ * own --color-* / --space-* tokens and reflows by container width, so the
+ * Adaptive scene shows real layout changes rather than a drawing of them. */
+export function HostApp({ pinned = null, tweaks = {}, compact = false }: HostProps) {
   const ctaClass = [
     'host-cta',
     tweaks.ctaPadding === 'off' ? 'is-off-scale' : '',
@@ -78,67 +85,72 @@ export function HostApp({ width = 'desktop', pinned = null, tweaks = {} }: HostP
   ]
     .filter(Boolean)
     .join(' ');
+  const dropCards = compact && pinned !== 'card' && !tweaks.duplicatedCard;
 
   return (
-    <div className={`host-app${width === 'phone' ? ' host-app--phone' : ''}`}>
-      <aside className="host-app__side">
+    <div className={`host-app${dropCards ? ' host-app--compact' : ''}`}>
+      <header className="host-app__top">
         <p className="host-app__brand">
           <Radio size={16} strokeWidth={2} aria-hidden="true" />
           Relay
         </p>
         <nav className="host-app__nav" aria-label="Relay">
           {NAV.map(({ label, icon: Glyph, on }) => (
-            <button type="button" className={on ? 'host-app__nav-btn is-current' : 'host-app__nav-btn'} tabIndex={-1} key={label}>
+            <span className={on ? 'host-app__nav-btn is-current' : 'host-app__nav-btn'} key={label}>
               <Glyph size={16} strokeWidth={2} aria-hidden="true" />
               {label}
-            </button>
+            </span>
           ))}
         </nav>
-      </aside>
+        <span className="host-app__burger">
+          <Menu size={18} strokeWidth={2} aria-hidden="true" />
+        </span>
+        <span className="host-app__me">M</span>
+      </header>
       <div className="host-app__main">
-        <section className="host-app__hero">
-          <h2>Ship the next release without another screenshot thread.</h2>
-          <p>A calm workspace for inbox, pipeline, and the people who close the loop.</p>
-          <Pin id="cta" pinned={pinned} hatch={tweaks.hatch} sizeLabel={tweaks.sizeLabel}>
-            <button type="button" className={ctaClass} tabIndex={-1}>
-              Get started
-            </button>
+        <div className="host-app__grid">
+          <section className="host-app__hero">
+            <h2>Ship the next release without another screenshot thread.</h2>
+            <p>A calm workspace for inbox, pipeline, and the people who close the loop.</p>
+            <Pin id="cta" pinned={pinned} hatch={tweaks.hatch} sizeLabel={tweaks.sizeLabel}>
+              <span className={ctaClass}>Get started</span>
+            </Pin>
+          </section>
+          <Pin id="login" pinned={pinned} hatch={tweaks.hatch} sizeLabel={tweaks.sizeLabel}>
+            <div className="host-login" style={{ padding: tweaks.loginPadding ?? 24 }}>
+              <h3>Sign in</h3>
+              <div className="host-login__label">
+                Email
+                <span className="host-login__field">
+                  <Mail className="host-login__glyph" size={16} strokeWidth={2} aria-hidden="true" />
+                  maya@relay.app
+                </span>
+              </div>
+              <div className="host-login__label">
+                Password
+                <span className="host-login__field">
+                  <Lock className="host-login__glyph" size={16} strokeWidth={2} aria-hidden="true" />
+                  ••••••••
+                </span>
+              </div>
+              <span className="host-login__submit">
+                Continue
+                <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
+              </span>
+            </div>
           </Pin>
-        </section>
-        <Pin id="login" pinned={pinned} hatch={tweaks.hatch} sizeLabel={tweaks.sizeLabel}>
-          <form className={`host-login${tweaks.loginEdited ? ' is-edited' : ''}`} onSubmit={(event) => event.preventDefault()}>
-            <h3>Sign in</h3>
-            <label>
-              Email
-              <span className="host-login__field">
-                <Mail className="host-login__glyph" size={16} strokeWidth={2} aria-hidden="true" />
-                <input type="email" defaultValue="maya@relay.app" readOnly />
-              </span>
-            </label>
-            <label>
-              Password
-              <span className="host-login__field">
-                <Lock className="host-login__glyph" size={16} strokeWidth={2} aria-hidden="true" />
-                <input type="password" defaultValue="········" readOnly />
-              </span>
-            </label>
-            <button type="button" className="host-login__submit" tabIndex={-1}>
-              Continue
-              <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
-            </button>
-          </form>
-        </Pin>
-        <div className="host-cards">
-          {CARDS.map((card, index) => {
-            const node = <Card key={card.title} {...card} duplicate={tweaks.duplicatedCard && index === 1} />;
-            if (index !== 1) return node;
-            return (
-              <Pin key={card.title} id="card" pinned={pinned} hatch={tweaks.hatch} sizeLabel={tweaks.sizeLabel}>
-                {node}
-              </Pin>
-            );
-          })}
-          {tweaks.duplicatedCard ? <Card {...CARDS[1]} duplicate /> : null}
+          <div className="host-cards">
+            {CARDS.map((card, index) => {
+              const node = <Card key={card.title} {...card} />;
+              if (index !== 1) return node;
+              return (
+                <Pin key={card.title} id="card" pinned={pinned} hatch={tweaks.hatch} sizeLabel={tweaks.sizeLabel}>
+                  {node}
+                </Pin>
+              );
+            })}
+            {tweaks.duplicatedCard ? <Card {...CARDS[1]} duplicate /> : null}
+          </div>
         </div>
       </div>
     </div>

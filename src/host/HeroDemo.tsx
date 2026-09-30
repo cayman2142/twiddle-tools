@@ -179,11 +179,7 @@ export function HeroDemo() {
           ref={hostRef}
           onMouseLeave={() => setHover(null)}
         >
-          <img
-            className="host-onboard__photo"
-            src="https://ik.imagekit.io/fpxbgsota/Image.png?updatedAt=1760432307349&q=80&w=1600&auto=format&fit=crop"
-            alt=""
-          />
+          <img className="host-onboard__photo" src="/demo/backdrop.webp" alt="" width="1600" height="1000" decoding="async" />
           <form className="host-onboard__form" onSubmit={(event) => event.preventDefault()}>
             <Mark
               id="card"
@@ -201,8 +197,8 @@ export function HeroDemo() {
                 onHover={setHover}
                 onPin={setPin}
               >
-                <span className="host-onboard__face">
-                  <img src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="" />
+                <span className="host-onboard__face" aria-hidden="true">
+                  M
                 </span>
                 <span className="host-onboard__cam" aria-hidden="true">
                   <Camera size={12} strokeWidth={2} />
@@ -237,11 +233,11 @@ export function HeroDemo() {
           <div className="host-onboard__chrome">
             {pinBox ? (
               <div
-                className={`sl-outline is-visible is-pinned is-live${hover === pin ? ' is-self-hover' : ''}`}
+                className={`twc-outline is-visible is-pinned is-live${hover === pin ? ' is-self-hover' : ''}`}
                 style={liveBox(pinBox, String(boxStyle(current).borderRadius))}
               />
             ) : null}
-            {hoverBox ? <div className="sl-hover-outline is-visible is-live" style={liveBox(hoverBox)} /> : null}
+            {hoverBox ? <div className="twc-hover-outline is-visible is-live" style={liveBox(hoverBox)} /> : null}
             {pinBox ? <LiveHatch box={pinBox} padding={nums(current.padding)} margin={nums(current.margin)} /> : null}
           </div>
         </div>

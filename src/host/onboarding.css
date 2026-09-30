@@ -19,10 +19,12 @@
   --radius-full: 999px;
   isolation: isolate;
   position: relative;
+  box-sizing: border-box;
   min-height: 100%;
   height: 100%;
   display: grid;
   place-items: center;
+  padding: var(--space-6) calc(var(--stage-rail, 0px) + var(--space-6)) calc(var(--stage-dock, 0px) + var(--space-6)) var(--space-6);
   overflow: hidden;
   color: var(--foreground);
   font-family: ui-sans-serif, system-ui, sans-serif;
@@ -87,16 +89,10 @@
   height: 100%;
   overflow: hidden;
   border-radius: inherit;
-  background: var(--muted);
-  color: var(--muted-foreground);
-  font-size: 28px;
+  background: linear-gradient(135deg, #5eead4, #0f766e);
+  color: #fff;
+  font-size: 24px;
   font-weight: 650;
-}
-
-.host-onboard__face img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .host-onboard__cam {
@@ -174,4 +170,12 @@
   inset: 0;
   z-index: 4;
   pointer-events: none;
+}
+
+@container stage (max-width: 879px) {
+  .host-onboard {
+    height: auto;
+    min-height: 480px;
+    padding: var(--space-6) var(--space-4) calc(var(--space-6) + 32px);
+  }
 }

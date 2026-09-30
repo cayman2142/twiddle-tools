@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { HostApp } from '../host/HostApp';
+import { useState, type CSSProperties } from 'react';
+import { StageFrame } from '../app/StageFrame';
 import { Thiing } from '../marketing/Thiing';
 import type { Scene, SceneState } from './types';
 
-export function FeatureScene({ scene, flip = false }: { scene: Scene; flip?: boolean }) {
+export function FeatureScene({ scene, wash = false }: { scene: Scene; wash?: boolean }) {
   const [state, setState] = useState<SceneState>('a');
-  const host = scene.host(state);
+  const labels = scene.stateLabels;
 
   return (
-    <section className={`site-band${flip ? ' site-band--wash' : ''}`} id={scene.id}>
-      <div className="site-section">
+    <section className={`site-band${wash ? ' site-band--wash' : ''}`} id={scene.id}>
+      <div className="site-section site-section--scene">
         <div className="site-section__head">
           <div className="site-section__kicker-row">
             <Thiing name={scene.icon} alt="" size="md" />
@@ -17,33 +17,28 @@ export function FeatureScene({ scene, flip = false }: { scene: Scene; flip?: boo
           </div>
           <h2>{scene.title}</h2>
           <p className="site-section__body">{scene.body}</p>
-          <div className="scene-toggle" role="tablist" aria-label={`${scene.title} states`}>
-            <button
-              type="button"
-              className={`scene-toggle__opt${state === 'a' ? ' is-on' : ''}`}
-              role="tab"
-              aria-selected={state === 'a'}
-              onClick={() => setState('a')}
-            >
-              {scene.stateLabels.a}
-            </button>
-            <button
-              type="button"
-              className={`scene-toggle__opt${state === 'b' ? ' is-on' : ''}`}
-              role="tab"
-              aria-selected={state === 'b'}
-              onClick={() => setState('b')}
-            >
-              {scene.stateLabels.b}
-            </button>
-          </div>
+          {labels ? (
+            <div className="scene-toggle" role="group" aria-label={`${scene.eyebrow}: switch the demo`}>
+              {(['a', 'b'] as const).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={`scene-toggle__opt${state === key ? ' is-on' : ''}`}
+                  aria-pressed={state === key}
+                  onClick={() => setState(key)}
+                >
+                  {labels[key]}
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
-        <div className="scene-stage">
-          <div className="scene-stage__host">
-            <HostApp {...host} />
-          </div>
-          {scene.chrome(state)}
-        </div>
+        <StageFrame
+          url={scene.url}
+          style={scene.height ? ({ ['--stage-h' as string]: `${scene.height}px` } as CSSProperties) : undefined}
+        >
+          {scene.view(state)}
+        </StageFrame>
       </div>
     </section>
   );

@@ -1,81 +1,261 @@
-/* Chrome overlays the staged page, as the plugin does on a live site.
- * Product CSS is position:fixed + a 21474836xx z-band; that must not escape
- * the marketing card. Remaps apply only to staged replicas inside
- * .scene-stage — never to live plugin chrome marked [data-sl-chrome]. */
+/* Staged demos: a browser window with a page inside and twiddle chrome on top.
+ *
+ * The chrome here is a replica in the twc- namespace (see
+ * scripts/vendor-chrome.mjs). The product's own rules are position: fixed at a
+ * 2147483xxx z-index; inside .scene-stage they are pinned back to the card.
+ * The live extension's .sl-* chrome never matches any of this, and the other
+ * way round, so running twiddle on twiddle.tools leaves both intact.
+ *
+ * Layout switches on the stage's own width (container `stage`), not the
+ * viewport: a wide stage floats the panel over a reserved right rail; a narrow
+ * one stacks page, panel, and toolbar. */
 
 .scene-stage {
+  --stage-h: 620px;
+  container: stage / inline-size;
   position: relative;
-  display: block;
   isolation: isolate;
   overflow: hidden;
-  min-height: 520px;
   background: var(--tw-surface);
   border: 1px solid var(--tw-border);
-  border-radius: var(--sl-r-3xl);
-  box-shadow: var(--sl-shadow-panel);
+  border-radius: var(--twc-r-3xl);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 24px 64px -24px rgb(24 24 27 / 0.22);
+  text-align: start;
+}
+
+/* ---- Browser bar ---- */
+
+.stage-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--tw-space-3);
+  height: 44px;
+  padding: 0 var(--tw-space-4);
+  border-bottom: 1px solid var(--tw-border);
+  background: var(--twc-gray-2);
+}
+
+.stage-bar__dots {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+
+.stage-bar__dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--twc-gray-6);
+}
+
+.stage-bar__url {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 1 420px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 4px var(--tw-space-3);
+  overflow: hidden;
+  border-radius: var(--twc-r-full);
+  background: var(--tw-surface);
+  box-shadow: inset 0 0 0 1px var(--tw-border);
+  color: var(--tw-fg-secondary);
+  font-family: var(--tw-font-mono);
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.stage-bar__url svg {
+  flex: none;
+  color: var(--tw-fg-muted);
+}
+
+.stage-bar__ext {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--twc-r-md);
+  background: color-mix(in srgb, var(--tw-accent) 14%, transparent);
+}
+
+.stage-bar__ext::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--twc-green-9, #30a46c);
+  box-shadow: 0 0 0 2px var(--twc-gray-2);
+}
+
+.stage-hint {
+  position: absolute;
+  top: calc(44px + var(--tw-space-3));
+  left: var(--tw-space-4);
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: var(--tw-space-2);
+  margin: 0;
+  padding: 6px var(--tw-space-3);
+  border-radius: var(--twc-r-full);
+  background: rgb(24 24 27 / 0.78);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+}
+
+/* ---- View: page + chrome ---- */
+
+.scene-stage__view {
+  --stage-rail: 0px;
+  --stage-dock: 0px;
+  position: relative;
+  height: var(--stage-h);
 }
 
 .scene-stage__host {
   position: absolute;
   inset: 0;
   z-index: 0;
-  isolation: isolate;
-  container: host / inline-size;
+  overflow: hidden;
 }
 
 .scene-stage__host > * {
   height: 100%;
 }
 
-.site-hero .scene-stage {
-  min-height: 640px;
-}
-
-.scene-stage .sl-panel:not([data-sl-chrome]),
-.scene-stage .sl-panel.is-visible:not([data-sl-chrome]) {
+.scene-stage .twc-panel,
+.scene-stage .twc-panel.is-visible {
   position: absolute !important;
-  top: var(--sl-space-4);
-  right: var(--sl-space-4);
-  left: auto;
+  top: var(--tw-space-4);
+  right: var(--tw-space-4);
   bottom: auto;
-  width: 340px;
-  margin: 0;
-  max-height: calc(100% - 96px);
-  display: flex;
+  left: auto;
   z-index: 6;
+  width: 324px;
+  max-height: calc(100% - var(--tw-space-4) - 84px);
+  margin: 0;
+  display: flex;
+  text-align: start;
 }
 
-.scene-stage .sl-fab-dock {
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: var(--sl-space-4) !important;
-  top: auto !important;
-  padding: 0 var(--sl-space-8);
+.scene-dock {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--tw-space-4);
   z-index: 7;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
 }
 
-.scene-stage .sl-hatch,
-.scene-stage .sl-hatch-preview,
-.scene-stage .sl-hatch__band,
-.scene-stage .sl-size-cap,
-.scene-stage .sl-outline,
-.scene-stage .sl-hover-outline,
-.scene-stage .sl-change-badges {
+.scene-dock .twc-fab-dock {
+  position: static !important;
+  padding: 0;
+  gap: var(--tw-space-3);
+}
+
+.scene-dock .twc-toolbar {
+  flex-wrap: nowrap;
+  max-width: none;
+}
+
+@container stage (min-width: 880px) {
+  .scene-stage__view {
+    --stage-rail: calc(324px + var(--tw-space-4) * 2);
+    --stage-dock: 76px;
+  }
+}
+
+/* The edit toolbar is ~800px wide; below that it is shown smaller, the way
+ * a screenshot would be, rather than wrapping into a shape it never has. */
+@container stage (max-width: 879px) {
+  .scene-stage__view {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .scene-stage__host {
+    position: relative;
+    inset: auto;
+  }
+
+  .scene-stage__host > * {
+    height: auto;
+  }
+
+  .scene-stage .twc-panel,
+  .scene-stage .twc-panel.is-visible {
+    position: relative !important;
+    top: auto;
+    right: auto;
+    max-width: 440px;
+    max-height: none;
+    margin: var(--tw-space-3) auto;
+    align-self: center;
+    width: calc(100% - var(--tw-space-6));
+  }
+
+  .scene-dock {
+    position: relative;
+    bottom: auto;
+    padding: 0 0 var(--tw-space-4);
+    zoom: 0.8;
+  }
+}
+
+@container stage (max-width: 760px) {
+  .scene-dock {
+    zoom: 0.66;
+  }
+}
+
+@container stage (max-width: 600px) {
+  .scene-dock {
+    display: none;
+  }
+
+  .stage-hint {
+    font-size: 12px;
+  }
+}
+
+/* ---- Overlays inside the page ---- */
+
+.scene-stage .twc-hatch,
+.scene-stage .twc-hatch-preview,
+.scene-stage .twc-hatch__band,
+.scene-stage .twc-size-cap,
+.scene-stage .twc-outline,
+.scene-stage .twc-hover-outline {
   position: absolute !important;
 }
 
-.scene-stage .sl-outline {
-  inset: calc(var(--sl-space-2) * -1);
+.scene-stage .twc-outline {
+  inset: 0;
   display: block;
   box-shadow: none;
   border-radius: inherit;
   z-index: 2;
 }
 
-.scene-stage .sl-outline.is-live,
-.scene-stage .sl-hover-outline.is-live,
-.scene-stage .sl-hatch.sl-hatch--live {
+.scene-stage .twc-outline.is-live,
+.scene-stage .twc-hover-outline.is-live,
+.scene-stage .twc-hatch.twc-hatch--live {
   top: var(--live-t) !important;
   left: var(--live-l) !important;
   width: var(--live-w) !important;
@@ -85,157 +265,171 @@
   z-index: 5;
 }
 
-.scene-stage .sl-outline.is-live,
-.scene-stage .sl-hover-outline.is-live {
+.scene-stage .twc-outline.is-live,
+.scene-stage .twc-hover-outline.is-live {
   border-radius: var(--live-r, 0);
 }
 
-.scene-stage .sl-hover-outline.is-live {
+.scene-stage .twc-hover-outline.is-live {
   display: block;
 }
 
-.scene-stage .sl-hatch,
-.scene-stage .sl-hatch-preview {
+.scene-stage .twc-hatch,
+.scene-stage .twc-hatch-preview {
   inset: 0;
   display: block;
   z-index: 3;
+  border-radius: inherit;
+  overflow: hidden;
 }
 
-.scene-stage .sl-hatch__band {
+.scene-stage .twc-hatch__band {
   z-index: 3;
+  transition: width 240ms ease, height 240ms ease;
 }
 
-.scene-stage .sl-hatch__band--top {
+.scene-stage .twc-hatch:not(.twc-hatch--live) .twc-hatch__band--top {
   top: 0;
   left: 0;
   right: 0;
+  height: var(--hatch);
 }
 
-.scene-stage .sl-hatch__band--bottom {
+.scene-stage .twc-hatch:not(.twc-hatch--live) .twc-hatch__band--bottom {
   bottom: 0;
   left: 0;
   right: 0;
+  height: var(--hatch);
 }
 
-.scene-stage .sl-hatch__band--left {
-  top: var(--space-4, 16px);
-  bottom: var(--space-4, 16px);
+.scene-stage .twc-hatch:not(.twc-hatch--live) .twc-hatch__band--left {
+  top: var(--hatch);
+  bottom: var(--hatch);
   left: 0;
+  width: var(--hatch);
 }
 
-.scene-stage .sl-hatch__band--right {
-  top: var(--space-4, 16px);
-  bottom: var(--space-4, 16px);
+.scene-stage .twc-hatch:not(.twc-hatch--live) .twc-hatch__band--right {
+  top: var(--hatch);
+  bottom: var(--hatch);
   right: 0;
+  width: var(--hatch);
 }
 
-.scene-stage .sl-size-cap {
+.scene-stage .twc-size-cap {
   display: block;
   white-space: nowrap;
   z-index: 4;
 }
 
-.scene-stage .host-pin--cta .sl-size-cap,
-.scene-stage .host-pin--login .sl-size-cap,
-.scene-stage .host-pin--card .sl-size-cap {
-  position: relative !important;
-  top: auto !important;
-  right: auto !important;
-  bottom: auto !important;
-  left: auto !important;
-  transform: none;
-  width: max-content;
-  margin: 0 auto var(--sl-space-2);
-}
-
-.scene-stage .host-pin--login .sl-size-cap,
-.scene-stage .host-pin--card .sl-size-cap {
-  margin-left: 0;
-}
-
-.scene-stage .sl-toolbar {
-  max-width: 100%;
-}
-
-.scene-stage .host-pin {
+/* Pinned Relay element: size chip above, outline + hatch on the box. */
+.host-pin {
   position: relative;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
 }
 
-.scene-stage .host-pin--cta {
-  display: inline-block;
-  width: max-content;
-  max-width: 100%;
-  margin-top: var(--tw-space-8);
+.host-pin--cta {
+  margin-top: var(--tw-space-2);
 }
 
-.scene-stage .host-pin--login,
-.scene-stage .host-pin--card {
-  display: block;
+.host-pin__box {
+  position: relative;
   width: 100%;
+  border-radius: 8px;
 }
+
+.host-pin--cta .host-pin__box {
+  width: max-content;
+}
+
+.host-pin--login .host-pin__box,
+.host-pin--card .host-pin__box {
+  border-radius: 12px;
+}
+
+.host-pin .twc-size-cap {
+  position: relative !important;
+}
+
+/* ---- Handoff payload ---- */
 
 .scene-payload {
-  position: absolute;
-  left: var(--tw-space-4);
-  bottom: calc(var(--tw-space-12) + var(--tw-space-4));
-  z-index: 5;
   margin: 0;
-  max-width: var(--tw-measure);
   padding: var(--tw-space-4);
-  background: var(--sl-surface);
-  color: var(--sl-fg);
-  border-radius: var(--sl-r-2xl);
-  box-shadow: var(--sl-shadow-panel);
-  font-family: var(--sl-font-mono);
-  font-size: var(--sl-text-xs);
+  background: var(--twc-surface);
+  color: var(--twc-fg);
+  border-radius: var(--twc-r-2xl);
+  box-shadow: var(--twc-shadow-panel);
+  font-family: var(--twc-font-mono);
+  font-size: var(--twc-text-xs);
   line-height: 1.45;
 }
 
-.scene-payload__kicker {
-  display: block;
-  margin-bottom: var(--tw-space-2);
-  color: var(--sl-fg-secondary);
-  font-family: var(--sl-font-ui);
-  font-size: var(--sl-text-2xs);
-  font-weight: 600;
+/* ---- Adaptive canvas ---- */
+
+.scene-stage__view:has(.scene-stage__host--canvas) {
+  height: auto;
 }
 
-@media (max-width: 720px) {
-  .scene-stage {
-    display: flex;
-    flex-direction: column;
-  }
+.scene-stage__host--canvas {
+  position: relative;
+  inset: auto;
+}
 
-  .scene-stage__host {
-    position: relative;
-    inset: auto;
-    min-height: 400px;
-    flex: none;
-  }
+.adaptive-canvas {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  background-color: var(--twc-gray-2);
+  background-image: radial-gradient(var(--twc-gray-6) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
 
-  .scene-stage .sl-panel,
-  .scene-stage .sl-panel.is-visible {
-    position: relative !important;
-    top: auto;
-    right: auto;
-    inset: auto;
-    width: auto;
-    max-width: 340px;
-    max-height: none;
-    margin: var(--tw-space-4);
-  }
+.adaptive-canvas__sizer {
+  position: relative;
+  min-width: 100%;
+}
 
-  .scene-stage .sl-fab-dock {
-    position: relative !important;
-    inset: auto !important;
-    padding: var(--tw-space-3) var(--tw-space-4) var(--tw-space-4);
-  }
+.adaptive-canvas__row {
+  position: absolute;
+  top: 28px;
+  display: flex;
+  align-items: flex-start;
+  transform-origin: top left;
+}
 
-  .scene-payload {
-    position: relative;
-    left: auto;
-    bottom: auto;
-    margin: var(--tw-space-4);
-  }
+.adaptive-frame {
+  --stage-rail: 0px;
+  --stage-dock: 0px;
+  flex: none;
+  margin: 0;
+}
+
+.adaptive-frame figcaption {
+  display: flex;
+  gap: 0.5em;
+  margin: 0 0 calc(8px / var(--s, 1));
+  color: var(--tw-fg-secondary);
+  font-family: var(--tw-font-sans);
+  font-size: calc(13px / var(--s, 1));
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.adaptive-frame figcaption span {
+  color: var(--tw-fg-muted);
+  font-family: var(--tw-font-mono);
+  font-weight: 500;
+}
+
+.adaptive-frame__page {
+  overflow: hidden;
+  border-radius: calc(12px / var(--s, 1));
+  box-shadow: 0 0 0 calc(1px / var(--s, 1)) var(--tw-border), 0 calc(12px / var(--s, 1)) calc(32px / var(--s, 1)) -8px rgb(24 24 27 / 0.18);
 }

@@ -5,8 +5,9 @@ import { CtaButton } from './CtaButton';
 import { NotchLeftWing, NotchRightWing } from './NotchWings';
 
 const LINKS = [
-  { href: '#pain', label: 'Features' },
-  { href: '#copy', label: 'How it works' },
+  { href: '/#how', label: 'How it works' },
+  { href: '/#edit', label: 'Features' },
+  { href: '/#faq', label: 'FAQ' },
   { href: '/privacy', label: 'Privacy' },
 ];
 
@@ -70,6 +71,7 @@ export function Nav() {
               </a>
             ))}
           </nav>
+          <CtaButton />
         </div>
       </div>
     </header>
