@@ -6,7 +6,6 @@ import { NotchLeftWing, NotchRightWing } from './NotchWings';
 
 const LINKS = [
   { href: '/#how', label: 'How it works' },
-  { href: '/#edit', label: 'Features' },
   { href: '/#faq', label: 'FAQ' },
   { href: '/privacy', label: 'Privacy' },
 ];

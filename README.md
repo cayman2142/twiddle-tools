@@ -8,9 +8,7 @@ The Chrome extension lives in its own repo (`cayman2142/twiddle`, locally `../tw
 
 - Vite + React + TypeScript
 - Marketing tokens: `--tw-*` (Onest + IBM Plex Mono)
-- Staged Twiddle chrome: vendored `vendor/chrome/*.css` (not `spec-lens.js`), renamed `sl-` → `twc-`
-- Toolbar: `src/chrome/snapshots/*.html`, captured from a running 0.1.6 build
-- Host simulation: Relay mini-app with its own `--color-*` / `--space-*`
+- Twiddle chrome tokens: vendored `vendor/chrome/*.css` (not `spec-lens.js`), renamed `sl-` → `twc-`; the site loads `tokens.css` only
 
 ## Commands
 
@@ -32,7 +30,7 @@ The script renames every `sl-` class, `--sl-` token and `data-sl-` attribute to
 `spec-lens.css` into whatever page it runs on, twiddle.tools included. With shared
 names, the live plugin's `position: fixed` rules grabbed the staged replicas, and
 this site's copy restyled the live plugin. With `twc-`, the two never match.
-Anything new under `src/chrome/` must use `twc-` too.
+Any site markup that reuses the replica must use `twc-` too.
 
 ## Hero playground
 

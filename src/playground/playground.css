@@ -318,6 +318,18 @@
   white-space: pre;
 }
 
+.handoff__change {
+  color: #fff;
+}
+
+.handoff__was {
+  color: #ff9592;
+}
+
+.handoff__want {
+  color: #7ee2b8;
+}
+
 .playground-finish__note {
   margin: 0;
   color: var(--tw-fg-secondary);
