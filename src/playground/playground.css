@@ -158,3 +158,110 @@
     animation-duration: 2400ms;
   }
 }
+
+/* ---- Coach ---- */
+
+.playground-coach {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.playground-hint {
+  position: absolute;
+  padding: var(--tw-space-3) var(--tw-space-4);
+  border-radius: var(--twc-r-2xl);
+  background: var(--tw-bezel);
+  color: var(--tw-fg-on-bezel);
+  box-shadow: 0 16px 40px -12px rgb(24 24 27 / 0.45);
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: start;
+  pointer-events: auto;
+  transition: left 200ms ease, top 200ms ease;
+}
+
+.playground-hint strong {
+  display: block;
+  margin: 0 0 2px;
+  padding-right: 24px;
+  font-size: 14px;
+}
+
+.playground-hint p {
+  margin: 0;
+  color: rgb(255 255 255 / 0.72);
+}
+
+.playground-hint__foot {
+  margin-top: var(--tw-space-2) !important;
+  padding-top: var(--tw-space-2);
+  border-top: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.playground-hint__close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgb(255 255 255 / 0.6);
+  cursor: pointer;
+}
+
+.playground-hint__close:hover {
+  background: rgb(255 255 255 / 0.1);
+  color: #fff;
+}
+
+.playground-hint::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: inherit;
+  transform: rotate(45deg);
+}
+
+.playground-hint[data-side='left']::after {
+  right: -5px;
+  top: calc(var(--arrow-y, 50%) - 5px);
+}
+
+.playground-hint[data-side='right']::after {
+  left: -5px;
+  top: calc(var(--arrow-y, 50%) - 5px);
+}
+
+.playground-hint[data-side='above']::after {
+  bottom: -5px;
+  left: calc(var(--arrow-x, 50%) - 5px);
+}
+
+.playground-hint.is-pulse {
+  animation: playground-pulse 1.2s ease 2;
+}
+
+@keyframes playground-pulse {
+  50% {
+    box-shadow:
+      0 16px 40px -12px rgb(24 24 27 / 0.45),
+      0 0 0 8px color-mix(in srgb, var(--tw-accent-solid) 35%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playground-hint {
+    transition: none;
+  }
+
+  .playground-hint.is-pulse {
+    animation: none;
+  }
+}

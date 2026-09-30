@@ -3,6 +3,7 @@ import { Power } from 'lucide-react';
 import { StageFrame } from '../app/StageFrame';
 import { connectBridge, type Bridge, type CopyResult } from './bridge';
 import { Checklist } from './Checklist';
+import { Coach } from './Coach';
 import { useNearViewport, useWideEnough } from './hooks';
 import { NONE, type Done } from './tasks';
 import './playground.css';
@@ -24,7 +25,7 @@ function Live() {
   const [run, setRun] = useState(0);
   const [status, setStatus] = useState<Status>('loading');
   const [done, setDone] = useState<Done>(NONE);
-  const [, setCopy] = useState<CopyResult | null>(null);
+  const [copy, setCopy] = useState<CopyResult | null>(null);
   const [bridge, setBridge] = useState<Bridge | null>(null);
   const live = wide === true && near && status !== 'failed';
 
@@ -84,6 +85,7 @@ function Live() {
               </button>
             </div>
           ) : null}
+          {status === 'ready' && bridge && !copy ? <Coach bridge={bridge} done={done} /> : null}
         </div>
       </StageFrame>
       <Checklist done={done} onReset={reset} />
