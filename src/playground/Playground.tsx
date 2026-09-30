@@ -27,6 +27,7 @@ function Live() {
   const [done, setDone] = useState<Done>(NONE);
   const [copy, setCopy] = useState<CopyResult | null>(null);
   const [bridge, setBridge] = useState<Bridge | null>(null);
+  const [tips, setTips] = useState(true);
   const live = wide === true && near && status !== 'failed';
 
   useEffect(() => {
@@ -85,7 +86,7 @@ function Live() {
               </button>
             </div>
           ) : null}
-          {status === 'ready' && bridge && !copy ? <Coach bridge={bridge} done={done} /> : null}
+          {status === 'ready' && bridge && !copy && tips ? <Coach bridge={bridge} done={done} onClose={() => setTips(false)} /> : null}
         </div>
       </StageFrame>
       <Checklist done={done} onReset={reset} />

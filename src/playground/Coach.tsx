@@ -51,16 +51,15 @@ const same = (a: Box, b: Box) =>
   Math.round(a.width) === Math.round(b.width) &&
   Math.round(a.height) === Math.round(b.height);
 
-export function Coach({ bridge, done }: { bridge: Bridge; done: Done }) {
+export function Coach({ bridge, done, onClose }: { bridge: Bridge; done: Done; onClose(): void }) {
   const task = nextTask(done);
   const [aim, setAim] = useState<Aim | null>(null);
-  const [dismissed, setDismissed] = useState(false);
   const [pulse, setPulse] = useState(false);
   const [height, setHeight] = useState(96);
   const hintRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!task || dismissed) {
+    if (!task) {
       setAim(null);
       return;
     }
@@ -81,7 +80,7 @@ export function Coach({ bridge, done }: { bridge: Bridge; done: Done }) {
     track();
     const id = window.setInterval(track, TRACK_MS);
     return () => window.clearInterval(id);
-  }, [bridge, task, dismissed]);
+  }, [bridge, task]);
 
   useEffect(() => {
     setPulse(false);
@@ -93,7 +92,7 @@ export function Coach({ bridge, done }: { bridge: Bridge; done: Done }) {
     if (hintRef.current) setHeight(hintRef.current.offsetHeight);
   }, [aim?.hint]);
 
-  if (!aim || dismissed || !task) return null;
+  if (!aim || !task) return null;
   const place = placeHint(aim.anchor, { width: HINT_WIDTH, height }, bridge.viewport());
   const style = {
     left: place.left,
@@ -108,7 +107,7 @@ export function Coach({ bridge, done }: { bridge: Bridge; done: Done }) {
         <strong>{aim.hint.title}</strong>
         <p>{aim.hint.body}</p>
         {aim.hint.foot ? <p className="playground-hint__foot">{aim.hint.foot}</p> : null}
-        <button type="button" className="playground-hint__close" aria-label="Hide tips" onClick={() => setDismissed(true)}>
+        <button type="button" className="playground-hint__close" aria-label="Hide tips" onClick={onClose}>
           <X size={14} strokeWidth={2.25} aria-hidden="true" />
         </button>
       </div>

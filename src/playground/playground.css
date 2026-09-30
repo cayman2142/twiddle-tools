@@ -245,7 +245,7 @@
 }
 
 .playground-hint.is-pulse {
-  animation: playground-pulse 1.2s ease 2;
+  animation: playground-pulse 1.2s ease 1;
 }
 
 @keyframes playground-pulse {

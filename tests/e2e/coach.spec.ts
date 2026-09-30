@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { MARGIN, playgroundReady, typeInto } from './helpers';
+import { MARGIN, forge, playgroundReady, typeInto } from './helpers';
 
 test('the first hint is about spacing', async ({ page }) => {
   await playgroundReady(page);
@@ -15,6 +15,27 @@ test('the hint moves on once spacing is done', async ({ page }) => {
 test('Hide tips removes the hint and keeps the checklist', async ({ page }) => {
   await playgroundReady(page);
   await page.getByRole('button', { name: 'Hide tips' }).click();
+  await expect(page.locator('.playground-hint')).toHaveCount(0);
+  await expect(page.locator('.playground-tasks')).toBeVisible();
+});
+
+test('Hide tips stays hidden after twiddle is switched off and on, and after Reset', async ({ page }) => {
+  const frame = await playgroundReady(page);
+  await expect(page.locator('.playground-hint')).toBeVisible();
+  await page.getByRole('button', { name: 'Hide tips' }).click();
+  await expect(page.locator('.playground-hint')).toHaveCount(0);
+
+  await frame.evaluate(() => (window as unknown as { Twiddle: { off(): void } }).Twiddle.off());
+  await page.getByRole('button', { name: 'Turn it back on' }).click();
+  await expect(page.locator('.playground__veil')).toHaveCount(0);
+  await expect(frame.locator('.sl-panel')).toBeVisible();
+  await page.waitForTimeout(1000);
+  await expect(page.locator('.playground-hint')).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Reset' }).click();
+  await expect(page.locator('.playground__veil')).toHaveCount(0, { timeout: 15_000 });
+  await expect(forge(page)!.locator('.sl-panel')).toBeVisible();
+  await page.waitForTimeout(1000);
   await expect(page.locator('.playground-hint')).toHaveCount(0);
   await expect(page.locator('.playground-tasks')).toBeVisible();
 });
