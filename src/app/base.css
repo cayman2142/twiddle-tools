@@ -3,6 +3,7 @@
 html {
   color-scheme: light;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 *,
@@ -105,4 +106,10 @@ code {
   font-size: var(--tw-text-md);
   color: var(--tw-fg-secondary);
   max-width: var(--tw-measure);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
