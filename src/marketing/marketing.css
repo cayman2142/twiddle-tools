@@ -21,10 +21,10 @@
     radial-gradient(circle at 0 0, transparent var(--twc-r-card), var(--tw-bezel) var(--twc-r-card));
   background-repeat: no-repeat;
   background-size:
-    100% var(--tw-space-2),
-    100% var(--tw-space-2),
-    var(--tw-space-2) 100%,
-    var(--tw-space-2) 100%,
+    100% calc(var(--tw-space-2) + 1px),
+    100% calc(var(--tw-space-2) + 1px),
+    calc(var(--tw-space-2) + 1px) 100%,
+    calc(var(--tw-space-2) + 1px) 100%,
     var(--twc-r-card) var(--twc-r-card),
     var(--twc-r-card) var(--twc-r-card),
     var(--twc-r-card) var(--twc-r-card),
@@ -34,10 +34,10 @@
     bottom,
     left,
     right,
-    top var(--tw-space-2) left var(--tw-space-2),
-    top var(--tw-space-2) right var(--tw-space-2),
-    bottom var(--tw-space-2) left var(--tw-space-2),
-    bottom var(--tw-space-2) right var(--tw-space-2);
+    top calc(var(--tw-space-2) - 1px) left calc(var(--tw-space-2) - 1px),
+    top calc(var(--tw-space-2) - 1px) right calc(var(--tw-space-2) - 1px),
+    bottom calc(var(--tw-space-2) - 1px) left calc(var(--tw-space-2) - 1px),
+    bottom calc(var(--tw-space-2) - 1px) right calc(var(--tw-space-2) - 1px);
 }
 
 .site-frame {
@@ -651,8 +651,26 @@
 }
 
 @media (max-width: 720px) {
+  .site-notch {
+    top: 0;
+  }
+
   .site-notch__island {
     display: flex;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: auto;
+    max-width: none;
+    transform: none;
+    border-radius: 0;
+    padding-top: calc(var(--tw-space-2) + var(--tw-space-2));
+    padding-right: calc(var(--tw-space-2) + var(--tw-space-3));
+    padding-left: calc(var(--tw-space-2) + var(--tw-space-3));
+  }
+
+  .site-notch__island > .site-wing {
+    display: none;
   }
 
   .site-notch__island > .site-cta {
