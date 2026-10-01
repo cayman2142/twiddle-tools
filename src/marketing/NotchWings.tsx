@@ -17,11 +17,11 @@ function Wing({ className, d }: WingProps & { d: string }) {
 }
 
 export function NotchLeftWing() {
-  return <Wing className="site-wing--left" d="M 0 0 C 11.046 0 20 8.954 20 20 H 21 V -1 H 0 Z" />;
+  return <Wing className="site-wing--left" d="M 0 0 C 11.046 0 20 8.954 20 20 H 28 V -8 H 0 Z" />;
 }
 
 export function NotchRightWing() {
-  return <Wing className="site-wing--right" d="M 20 0 C 8.954 0 0 8.954 0 20 H -1 V -1 H 20 Z" />;
+  return <Wing className="site-wing--right" d="M 20 0 C 8.954 0 0 8.954 0 20 H -8 V -8 H 20 Z" />;
 }
 
 export function NotchCornerLeftWing() {
