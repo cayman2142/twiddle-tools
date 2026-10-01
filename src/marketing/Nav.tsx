@@ -64,16 +64,14 @@ export function Nav() {
           inert={!open}
           aria-hidden={!open}
         >
-          <div className="site-notch__drawer-panel">
-            <nav aria-label="Page">
-              {LINKS.map((link) => (
-                <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
-                  {link.label}
-                </a>
-              ))}
-            </nav>
-            <CtaButton />
-          </div>
+          <nav aria-label="Page">
+            {LINKS.map((link) => (
+              <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
+          <CtaButton />
         </div>
       </div>
     </header>
