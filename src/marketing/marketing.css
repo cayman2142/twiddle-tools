@@ -101,9 +101,15 @@
   row-gap: 0;
   width: max-content;
   max-width: calc(100% - var(--tw-space-4));
+  interpolate-size: allow-keywords;
+  transition: width 420ms var(--twc-ease);
   padding: var(--tw-space-2) var(--tw-space-4);
   border-bottom-left-radius: var(--twc-r-3xl);
   border-bottom-right-radius: var(--twc-r-3xl);
+}
+
+.site-notch__island:has(.site-notch__drawer.is-open) {
+  width: calc(100% - var(--tw-space-4));
 }
 
 .site-wing {
@@ -180,7 +186,7 @@
 }
 
 .site-notch__menu-btn svg {
-  transition: transform var(--twc-dur-3) var(--twc-ease-out);
+  transition: transform 420ms var(--twc-ease);
 }
 
 .site-notch__menu-btn svg.is-open {
@@ -188,26 +194,25 @@
 }
 
 .site-notch__drawer {
-  flex: 0 0 0;
+  display: grid;
+  flex: none;
   width: 0;
-  min-width: 0;
-  height: 0;
+  min-width: 100%;
+  grid-template-rows: 0fr;
   min-height: 0;
   overflow: clip;
-  interpolate-size: allow-keywords;
-  opacity: 0;
   pointer-events: none;
-  transition:
-    height var(--twc-dur-3) var(--twc-ease-out),
-    opacity var(--twc-dur-2) var(--twc-ease);
+  transition: grid-template-rows 420ms var(--twc-ease);
 }
 
 .site-notch__drawer.is-open {
-  flex: 1 1 100%;
-  width: auto;
-  height: auto;
-  opacity: 1;
+  grid-template-rows: 1fr;
   pointer-events: auto;
+}
+
+.site-notch__drawer-panel {
+  min-height: 0;
+  overflow: clip;
 }
 
 .site-notch__drawer nav {
@@ -739,6 +744,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .site-notch__island,
   .site-notch__drawer,
   .site-notch__menu-btn svg {
     transition: none;
